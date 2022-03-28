@@ -1,0 +1,86 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ .Values.koordlet.serviceAccount }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Values.koordlet.serviceAccount }}
+rules:
+  - apiGroups:
+      - config.koordinator.sh
+      - slo.koordinator.sh
+    resources:
+      - '*'
+    verbs:
+      - '*'
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - configmaps/status
+    verbs:
+      - '*'
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+      - nodes/status
+      - pods
+      - pods/status
+    verbs:
+      - patch
+      - update
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - '*'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ .Values.koordlet.serviceAccount }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Values.koordlet.serviceAccount }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Values.koordlet.serviceAccount }}
+    namespace: {{ .Values.namespace }}
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: koordlet
+spec:
+  replicas: {{ .Values.koordlet.replicaCount }}
+  selector:
+    matchLabels:
+      koord-app: koordlet
+  template:
+    metadata:
+      labels:
+        koord-app: koordlet
+    spec:
+      {{- with .Values.koordlet.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ .Values.koordlet.serviceAccount }}
+      containers:
+        - name: koordlet
+          image: {{ .Values.koordlet.imagePullSecrets }}
+          imagePullPolicy: {{ .Values.koordlet.imagePullPolicy }}
+          ports:
+          livenessProbe:
+          readinessProbe:
+          resources:
+            {{- toYaml .Values.koordlet.resources | nindent 12 }}
