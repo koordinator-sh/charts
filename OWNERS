@@ -1,3 +1,5 @@
 # See: https://go.k8s.io/owners
 approvers:
+- stormgbs
 reviewers:
+- stormgbs

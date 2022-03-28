@@ -12,11 +12,11 @@ koordController:
   serviceAccount: koord-controller
   resources:
     limits:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 1000m
+      memory: 1Gi
     requests:
       cpu: 100m
-      memory: 128Mi
+      memory: 200Mi
 
 koordlet:
   image: registry.cn-zhangjiakou.aliyuncs.com/acs/koordlet:v0.1.0
@@ -25,9 +25,9 @@ koordlet:
   serviceAccount: koordlet
   resources:
     limits:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 500m
+      memory: 256Mi
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: "0"
+      memory: 0
 
