@@ -1,0 +1,34 @@
+# Default values for koordinator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+namespace: koord-system
+
+koordController:
+  replicaCount: 1
+  image: registry.cn-zhangjiakou.aliyuncs.com/acs/koord-controller:v0.1.0
+  imagePullPolicy: Always
+  imagePullSecrets: []
+  serviceAccount: koord-controller
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 200Mi
+
+koordlet:
+  image: registry.cn-zhangjiakou.aliyuncs.com/acs/koordlet:v0.1.0
+  imagePullPolicy: Always
+  imagePullSecrets: []
+  serviceAccount: koordlet
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: "0"
+      memory: 0
+  logLevel: 4
+
