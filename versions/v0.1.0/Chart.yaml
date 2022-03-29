@@ -4,10 +4,11 @@ description: A Helm chart for Koordinator
 type: application
 version: 0.1.0
 appVersion: 0.1.0
-ico: ""
+icon: https://koordinator.sh/img/logo.svg
 keywords:
   - koordinator
   - co-location
   - mixed-workloads
 home: https://koordinator.sh
-sources: https://github.com/koordinator-sh/koordinator
+sources: 
+  - https://github.com/koordinator-sh/koordinator
