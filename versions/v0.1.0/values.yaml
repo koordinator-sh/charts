@@ -19,7 +19,7 @@ koordController:
       memory: 200Mi
 
 koordlet:
-  image: registry.cn-zhangjiakou.aliyuncs.com/acs/koordlet:v0.1.0
+  image: docker.io/koordinatorsh/koordlet:v0.1
   imagePullPolicy: Always
   imagePullSecrets: []
   serviceAccount: koordlet
