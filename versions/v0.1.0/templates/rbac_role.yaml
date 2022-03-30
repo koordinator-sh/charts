@@ -248,3 +248,35 @@ subjects:
   - kind: ServiceAccount
     name: koordlet
     namespace: {{ .Values.installation.namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: koordinator-scheduler
+  namespace: {{ .Values.installation.namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: koordinator-scheduler-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:kube-scheduler
+subjects:
+  - kind: ServiceAccount
+    name: koordinator-scheduler
+    namespace: {{ .Values.installation.namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: koordinator-scheduler-rolebinding-volume
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:volume-scheduler
+subjects:
+  - kind: ServiceAccount
+    name: koordinator-scheduler
+    namespace: {{ .Values.installation.namespace }}
