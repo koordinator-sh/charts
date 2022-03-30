@@ -17,12 +17,6 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v1
 
-      - name: Add dependency chart repos
-        run: |
-          helm repo add koordinator https://koordinator-sh.github.io/charts
-          helm repo add minio https://helm.min.io/
-          helm repo add stable https://charts.helm.sh/stable
-          helm repo add incubator https://charts.helm.sh/incubator
       - name: Configure Git
         run: |
           git config user.name "gh-actions"
