@@ -9,3 +9,9 @@ data:
       "enable": true,
       "metricAggregateDurationSeconds": 60
     }
+  resource-threshold-config: |
+    {
+      "clusterStrategy": {
+        "enable": true
+      }
+    }
