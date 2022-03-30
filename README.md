@@ -5,7 +5,7 @@
 Koordinator Charts is a collection of **community maintained** charts for http://koordinator.sh/ projects. The charts can be added using following command:
 
 ```
-helm repo add koordinator https://koordinator.github.io/charts
+helm repo add koordinator https://koordinator-sh.github.io/charts
 ```
 
 ## Contributing
