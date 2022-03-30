@@ -1,9 +1,10 @@
+{{/* vim: set filetype=mustache: */}}
 {{/*
 Expand the name of the chart.
 */}}
 {{- define "koordinator.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- end }}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 
 {{/*
 Create a default fully qualified app name.
@@ -24,33 +25,6 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 
 {{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "koordinator.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Common labels
-*/}}
-{{- define "koordinator.labels" -}}
-helm.sh/chart: {{ include "koordinator.chart" . }}
-{{ include "koordinator.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-{{/*
-Selector labels
-*/}}
-{{- define "koordinator.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "koordinator.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{/*
 Create the name of the service account to use
 */}}
 {{- define "koordinator.serviceAccountName" -}}
@@ -60,3 +34,75 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "koordinator.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Lookup existing immutatble resources
+*/}}
+{{- define "webhookServiceSpec" -}}
+{{- $service := lookup "v1" "Service" .Values.installation.namespace "koordinator-webhook-service" -}}
+{{- if $service -}}
+{{ if $service.spec.clusterIP -}}
+clusterIP: {{ $service.spec.clusterIP }}
+{{- end }}
+{{ if $service.spec.clusterIPs -}}
+clusterIPs:
+  {{ $service.spec.clusterIPs }}
+{{- end }}
+{{ if $service.spec.ipFamilyPolicy -}}
+ipFamilyPolicy: {{ $service.spec.ipFamilyPolicy }}
+{{- end }}
+{{ if $service.spec.ipFamilies -}}
+ipFamilies:
+  {{ $service.spec.ipFamilies }}
+{{- end }}
+{{ if $service.spec.type -}}
+type: {{ $service.spec.type }}
+{{- end }}
+{{ if $service.spec.ipFamily -}}
+ipFamily: {{ $service.spec.ipFamily }}
+{{- end }}
+{{- end -}}
+ports:
+- port: 443
+  targetPort: {{ .Values.manager.webhook.port }}
+selector:
+  koord-app: koordinator-manager
+{{- end -}}
+
+{{- define "webhookSecretData" -}}
+{{- $secret := lookup "v1" "Secret" .Values.installation.namespace "koordinator-webhook-certs" -}}
+{{- if $secret -}}
+data:
+{{- range $k, $v := $secret.data }}
+  {{ $k }}: {{ $v }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{- define "serviceAccountManager" -}}
+{{- $sa := lookup "v1" "ServiceAccount" .Values.installation.namespace "koordinator-manager" -}}
+{{- if $sa -}}
+secrets:
+{{- range $v := $sa.secrets }}
+- name: {{ $v.name }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{- define "serviceAccountDaemon" -}}
+{{- $sa := lookup "v1" "ServiceAccount" .Values.installation.namespace "koordinator-daemon" -}}
+{{- if $sa -}}
+secrets:
+{{- range $v := $sa.secrets }}
+- name: {{ $v.name }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
