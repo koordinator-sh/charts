@@ -69,3 +69,31 @@ webhookConfiguration:
 
 serviceAccount:
   annotations: {}
+
+
+scheduler:
+  # settings for log print
+  log:
+    # log level for koordinator-manager
+    level: "4"
+
+  replicas: 2
+  image:
+    repository: koordinatorsh/koord-scheduler
+    tag: main-e07ad10
+  port: 10251
+
+  # resources of koordinator-manager container
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+
+  hostNetwork: false
+
+  nodeAffinity: {}
+  nodeSelector: {}
+  tolerations: []
