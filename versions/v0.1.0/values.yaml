@@ -16,7 +16,7 @@ featureGates: ""
 koordlet:
   image:
     repository: koordinatorsh/koordlet
-    tag: HEAD-ef18acd
+    tag: v0.1.0-bf37294
   resources:
     limits:
       cpu: 500m
@@ -37,7 +37,7 @@ manager:
   replicas: 2
   image:
     repository: koordinatorsh/koord-manager
-    tag: HEAD-ef18acd
+    tag: v0.1.0-bf37294
   webhook:
     port: 9876
   metrics:
@@ -80,7 +80,7 @@ scheduler:
   replicas: 2
   image:
     repository: koordinatorsh/koord-scheduler
-    tag: main-e07ad10
+    tag: v0.1.0-bf37294
   port: 10251
 
   # resources of koordinator-manager container
