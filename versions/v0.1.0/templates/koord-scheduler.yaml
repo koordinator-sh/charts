@@ -39,7 +39,11 @@ spec:
             - --config=/config/koord-scheduler.config
           command:
             - /koord-scheduler
+          {{- if .Values.imageRepositoryHost }}
+          image: {{ .Values.imageRepositoryHost }}/{{ .Values.scheduler.image.repository }}:{{ .Values.scheduler.image.tag }}
+          {{- else }}
           image: {{ .Values.scheduler.image.repository }}:{{ .Values.scheduler.image.tag }}
+          {{- end}}
           imagePullPolicy: Always
           name: scheduler
           volumeMounts:

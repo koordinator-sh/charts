@@ -59,7 +59,11 @@ spec:
             - --sync-period={{ .Values.manager.resyncPeriod }}
           command:
             - /koord-manager
+          {{- if .Values.imageRepositoryHost }}
+          image: {{ .Values.imageRepositoryHost }}/{{ .Values.manager.image.repository }}:{{ .Values.manager.image.tag }}
+          {{- else }}
           image: {{ .Values.manager.image.repository }}:{{ .Values.manager.image.tag }}
+          {{- end}}
           imagePullPolicy: Always
           name: manager
           env:

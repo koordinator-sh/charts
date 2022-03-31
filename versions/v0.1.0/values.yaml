@@ -13,6 +13,8 @@ installation:
 
 featureGates: ""
 
+imageRepositoryHost: ""
+
 koordlet:
   image:
     repository: koordinatorsh/koordlet
