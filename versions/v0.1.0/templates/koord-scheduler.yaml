@@ -2,14 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    koord-app: koordinator-scheduler
-  name: koordinator-scheduler
+    koord-app: koord-scheduler
+  name: koord-scheduler
   namespace: {{ .Values.installation.namespace }}
 spec:
   replicas: {{ .Values.scheduler.replicas }}
   selector:
     matchLabels:
-      koord-app: koordinator-scheduler
+      koord-app: koord-scheduler
   minReadySeconds: 3
   strategy:
     type: RollingUpdate
@@ -19,7 +19,7 @@ spec:
   template:
     metadata:
       labels:
-        koord-app: koordinator-scheduler
+        koord-app: koord-scheduler
     spec:
 {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -57,7 +57,7 @@ spec:
             {{- toYaml .Values.scheduler.resources | nindent 12 }}
       hostNetwork: {{ .Values.scheduler.hostNetwork }}
       terminationGracePeriodSeconds: 10
-      serviceAccountName: koordinator-scheduler
+      serviceAccountName: koord-scheduler
       volumes:
       - configMap:
           defaultMode: 420
@@ -75,7 +75,7 @@ spec:
                 - key: koord-app
                   operator: In
                   values:
-                  - koordinator-scheduler
+                  - koord-scheduler
               topologyKey: kubernetes.io/hostname
             weight: 100
 {{- with .Values.scheduler.nodeAffinity }}

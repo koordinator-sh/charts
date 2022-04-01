@@ -81,5 +81,5 @@ If you want to enable all feature-gates, set the parameter as `featureGates=AllA
 If you are in China and have problem to pull image from official DockerHub, you can use the registry hosted on Alibaba Cloud:
 
 ```bash
-$ helm install koordinator https://... --set imageRepositoryHost=koordinator-registry-vpc.cn-hangzhou.cr.aliyuncs.com
+$ helm install koordinator https://... --set imageRepositoryHost=koordinator-registry.cn-hangzhou.cr.aliyuncs.com
 ```
