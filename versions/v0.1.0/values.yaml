@@ -18,7 +18,7 @@ imageRepositoryHost: ""
 koordlet:
   image:
     repository: koordinatorsh/koordlet
-    tag: v0.1.0-bf37294
+    tag: v0.1.0
   resources:
     limits:
       cpu: 500m
@@ -39,7 +39,7 @@ manager:
   replicas: 2
   image:
     repository: koordinatorsh/koord-manager
-    tag: v0.1.0-bf37294
+    tag: v0.1.0
   webhook:
     port: 9876
   metrics:
@@ -82,7 +82,7 @@ scheduler:
   replicas: 2
   image:
     repository: koordinatorsh/koord-scheduler
-    tag: v0.1.0-bf37294
+    tag: v0.1.0
   port: 10251
 
   # resources of koord-scheduler container
