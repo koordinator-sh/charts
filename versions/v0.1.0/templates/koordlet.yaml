@@ -31,7 +31,11 @@ spec:
             - -feature-gates=AllAlpha=true
             - --logtostderr=true
             - --v={{ .Values.koordlet.log.level }}
+          {{- if .Values.imageRepositoryHost }}
+          image: {{ .Values.imageRepositoryHost }}/{{ .Values.koordlet.image.repository }}:{{ .Values.koordlet.image.tag }}
+          {{- else }}
           image: {{ .Values.koordlet.image.repository }}:{{ .Values.koordlet.image.tag }}
+          {{- end}}
           imagePullPolicy: Always
           name: koordlet
           env:

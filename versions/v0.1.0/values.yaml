@@ -13,6 +13,8 @@ installation:
 
 featureGates: ""
 
+imageRepositoryHost: ""
+
 koordlet:
   image:
     repository: koordinatorsh/koordlet
@@ -25,13 +27,13 @@ koordlet:
       cpu: "0"
       memory: "0"
   log:
-    # log level for koordinator-manager
+    # log level for koordlet
     level: "4"
 
 manager:
   # settings for log print
   log:
-    # log level for koordinator-manager
+    # log level for koord-manager
     level: "4"
 
   replicas: 2
@@ -47,7 +49,7 @@ manager:
 
   resyncPeriod: "0"
 
-  # resources of koordinator-manager container
+  # resources of koord-manager container
   resources:
     limits:
       cpu: 1000m
@@ -74,7 +76,7 @@ serviceAccount:
 scheduler:
   # settings for log print
   log:
-    # log level for koordinator-manager
+    # log level for koord-scheduler
     level: "4"
 
   replicas: 2
@@ -83,7 +85,7 @@ scheduler:
     tag: v0.1.0-bf37294
   port: 10251
 
-  # resources of koordinator-manager container
+  # resources of koord-scheduler container
   resources:
     limits:
       cpu: 1000m

@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: koordinator-leader-election-role
+  name: koord-leader-election-role
   namespace: {{ .Values.installation.namespace }}
 rules:
 - apiGroups:
@@ -35,7 +35,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   creationTimestamp: null
-  name: koordinator-manager-role
+  name: koord-manager-role
 rules:
 - apiGroups:
   - ""
@@ -151,6 +151,14 @@ rules:
   - update
   - watch
 - apiGroups:
+  - scheduling.k8s.io
+  resources:
+  - priorityclasses
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
   - config.koordinator.sh
   - slo.koordinator.sh
   resources:
@@ -167,28 +175,28 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: koordinator-leader-election-rolebinding
+  name: koord-leader-election-rolebinding
   namespace: {{ .Values.installation.namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: koordinator-leader-election-role
+  name: koord-leader-election-role
 subjects:
   - kind: ServiceAccount
-    name: koordinator-manager
+    name: koord-manager
     namespace: {{ .Values.installation.namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: koordinator-manager-rolebinding
+  name: koord-manager-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: koordinator-manager-role
+  name: koord-manager-role
 subjects:
   - kind: ServiceAccount
-    name: koordinator-manager
+    name: koord-manager
     namespace: {{ .Values.installation.namespace }}
 ---
 apiVersion: v1
@@ -252,31 +260,31 @@ subjects:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: koordinator-scheduler
+  name: koord-scheduler
   namespace: {{ .Values.installation.namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: koordinator-scheduler-rolebinding
+  name: koord-scheduler-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: system:kube-scheduler
 subjects:
   - kind: ServiceAccount
-    name: koordinator-scheduler
+    name: koord-scheduler
     namespace: {{ .Values.installation.namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: koordinator-scheduler-rolebinding-volume
+  name: koord-scheduler-rolebinding-volume
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: system:volume-scheduler
 subjects:
   - kind: ServiceAccount
-    name: koordinator-scheduler
+    name: koord-scheduler
     namespace: {{ .Values.installation.namespace }}

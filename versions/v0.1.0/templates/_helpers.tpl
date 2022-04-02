@@ -73,7 +73,7 @@ ports:
 - port: 443
   targetPort: {{ .Values.manager.webhook.port }}
 selector:
-  koord-app: koordinator-manager
+  koord-app: koord-manager
 {{- end -}}
 
 {{- define "webhookSecretData" -}}
@@ -87,7 +87,7 @@ data:
 {{- end -}}
 
 {{- define "serviceAccountManager" -}}
-{{- $sa := lookup "v1" "ServiceAccount" .Values.installation.namespace "koordinator-manager" -}}
+{{- $sa := lookup "v1" "ServiceAccount" .Values.installation.namespace "koord-manager" -}}
 {{- if $sa -}}
 secrets:
 {{- range $v := $sa.secrets }}
@@ -95,14 +95,3 @@ secrets:
 {{- end }}
 {{- end }}
 {{- end -}}
-
-{{- define "serviceAccountDaemon" -}}
-{{- $sa := lookup "v1" "ServiceAccount" .Values.installation.namespace "koordinator-daemon" -}}
-{{- if $sa -}}
-secrets:
-{{- range $v := $sa.secrets }}
-- name: {{ $v.name }}
-{{- end }}
-{{- end }}
-{{- end -}}
-

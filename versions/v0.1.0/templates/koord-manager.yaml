@@ -24,14 +24,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    koord-app: koordinator-manager
-  name: koordinator-manager
+    koord-app: koord-manager
+  name: koord-manager
   namespace: {{ .Values.installation.namespace }}
 spec:
   replicas: {{ .Values.manager.replicas }}
   selector:
     matchLabels:
-      koord-app: koordinator-manager
+      koord-app: koord-manager
   minReadySeconds: 3
   strategy:
     type: RollingUpdate
@@ -41,7 +41,7 @@ spec:
   template:
     metadata:
       labels:
-        koord-app: koordinator-manager
+        koord-app: koord-manager
     spec:
 {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -59,7 +59,11 @@ spec:
             - --sync-period={{ .Values.manager.resyncPeriod }}
           command:
             - /koord-manager
+          {{- if .Values.imageRepositoryHost }}
+          image: {{ .Values.imageRepositoryHost }}/{{ .Values.manager.image.repository }}:{{ .Values.manager.image.tag }}
+          {{- else }}
           image: {{ .Values.manager.image.repository }}:{{ .Values.manager.image.tag }}
+          {{- end}}
           imagePullPolicy: Always
           name: manager
           env:
@@ -89,7 +93,7 @@ spec:
             {{- toYaml .Values.manager.resources | nindent 12 }}
       hostNetwork: {{ .Values.manager.hostNetwork }}
       terminationGracePeriodSeconds: 10
-      serviceAccountName: koordinator-manager
+      serviceAccountName: koord-manager
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -99,7 +103,7 @@ spec:
                 - key: koord-app
                   operator: In
                   values:
-                  - koordinator-manager
+                  - koord-manager
               topologyKey: kubernetes.io/hostname
             weight: 100
 {{- with .Values.manager.nodeAffinity }}
@@ -120,7 +124,7 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: koordinator-manager
+  name: koord-manager
 {{- if .Values.serviceAccount.annotations }}
   annotations:
 {{ toYaml .Values.serviceAccount.annotations | indent 4 }}

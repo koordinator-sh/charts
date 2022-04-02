@@ -15,6 +15,7 @@ The following table lists the configurable parameters of the chart and their def
 | `featureGates`                            | Feature gates for Koordinator, empty string means all by default | ` `                             |
 | `installation.namespace`                  | namespace for Koordinator installation                           | `koordinator-system`            |
 | `installation.createNamespace`            | Whether to create the installation.namespace                     | `true`                          |
+| `imageRepositoryHost`                     | Image repository host                                            | ` `                             |
 | `manager.log.level`                       | Log level that koord-manager printed                             | `4`                             |
 | `manager.replicas`                        | Replicas of koord-manager deployment                             | `2`                             |
 | `manager.image.repository`                | Repository for koord-manager image                               | `koordinatorsh/koord-manager`   |
@@ -80,5 +81,5 @@ If you want to enable all feature-gates, set the parameter as `featureGates=AllA
 If you are in China and have problem to pull image from official DockerHub, you can use the registry hosted on Alibaba Cloud:
 
 ```bash
-$ helm install koordinator https://... --set  manager.image.repository=koordinator-registry.cn-hangzhou.cr.aliyuncs.com/koordinator/koord-manager
+$ helm install koordinator https://... --set imageRepositoryHost=koordinator-registry.cn-hangzhou.cr.aliyuncs.com
 ```
