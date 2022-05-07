@@ -1,0 +1,101 @@
+# Default values for koordinator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+crds:
+  managed: true
+
+# values for koordinator installation
+installation:
+  namespace: koordinator-system
+  roleListGroups:
+    - '*'
+
+featureGates: ""
+
+imageRepositoryHost: ""
+
+koordlet:
+  image:
+    repository: koordinatorsh/koordlet
+    tag: v0.3.0
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: "0"
+      memory: "0"
+  log:
+    # log level for koordlet
+    level: "4"
+
+manager:
+  # settings for log print
+  log:
+    # log level for koord-manager
+    level: "4"
+
+  replicas: 2
+  image:
+    repository: koordinatorsh/koord-manager
+    tag: v0.3.0
+  webhook:
+    port: 9876
+  metrics:
+    port: 8080
+  healthProbe:
+    port: 8000
+
+  resyncPeriod: "0"
+
+  # resources of koord-manager container
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+
+  hostNetwork: false
+
+  nodeAffinity: {}
+  nodeSelector: {}
+  tolerations: []
+
+webhookConfiguration:
+  failurePolicy:
+    pods: Ignore
+  timeoutSeconds: 30
+
+serviceAccount:
+  annotations: {}
+
+
+scheduler:
+  # settings for log print
+  log:
+    # log level for koord-scheduler
+    level: "4"
+
+  replicas: 2
+  image:
+    repository: koordinatorsh/koord-scheduler
+    tag: v0.3.0
+  port: 10251
+
+  # resources of koord-scheduler container
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+
+  hostNetwork: false
+
+  nodeAffinity: {}
+  nodeSelector: {}
+  tolerations: []
