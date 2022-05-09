@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: koord-scheduler-config
+  namespace: {{ .Values.installation.namespace }}
+data:
+  koord-scheduler-config: |
+    apiVersion: kubescheduler.config.k8s.io/v1beta2
+    kind: KubeSchedulerConfiguration
+    profiles:
+      - pluginConfig:
+        - args:
+            apiVersion: kubescheduler.config.k8s.io/v1beta2
+            kind: NodeResourcesLeastAllocatedArgs
+            resources:
+            - name: cpu
+              weight: 1
+            - name: memory
+              weight: 1
+            - name: "koordinator.sh/batch-cpu"
+              weight: 10
+            - name: "koordinator.sh/batch-mem"
+              weight: 10
+          name: NodeResourcesBalancedAllocationArgs
+        schedulerName: koord-scheduler
