@@ -229,6 +229,7 @@ rules:
     resources:
       - nodes
       - nodes/status
+      - nodes/proxy
       - pods
       - pods/status
     verbs:
