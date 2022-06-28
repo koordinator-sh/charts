@@ -85,6 +85,9 @@ scheduler:
     tag: v0.4.1
   port: 10251
 
+  featureGates: ""
+  compatibleFeatureGates: "CSIStorageCapacity=false"
+
   # resources of koord-scheduler container
   resources:
     limits:

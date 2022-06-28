@@ -9,7 +9,8 @@ data:
     kind: KubeSchedulerConfiguration
     profiles:
       - pluginConfig:
-        - args:
+        - name: NodeResourcesFit
+          args:
             apiVersion: kubescheduler.config.k8s.io/v1beta2
             kind: NodeResourcesFitArgs
             scoringStrategy:
@@ -23,8 +24,8 @@ data:
                   weight: 1
                 - name: "koordinator.sh/batch-mem"
                   weight: 1
-          name: NodeResourcesFit
-        - args:
+        - name: LoadAwareScheduling
+          args:
             apiVersion: kubescheduler.config.k8s.io/v1beta2
             kind: LoadAwareSchedulingArgs
             filterExpiredNodeMetrics: true
@@ -38,18 +39,32 @@ data:
             estimatedScalingFactors:
               cpu: 80
               memory: 70
-          name: LoadAwareScheduling
         plugins:
+          preFilter:
+            enabled:
+              - name: NodeNUMAResource
           filter:
             enabled:
               - name: LoadAwareScheduling
-                weight: 0
-          reserve:
+              - name: NodeNUMAResource
+{{- if semverCompare "<= 1.20-0" .Capabilities.KubeVersion.Version }} 
+          postFilter:
+            disabled:
+              - name: DefaultPreemption
             enabled:
-              - name: LoadAwareScheduling
-                weight: 0
+              - name: CompatibleDefaultPreemption
+{{- end }}
           score:
             enabled:
               - name: LoadAwareScheduling
-                weight: 1000
+                weight: 1
+              - name: NodeNUMAResource
+                weight: 1
+          reserve:
+            enabled:
+              - name: LoadAwareScheduling
+              - name: NodeNUMAResource
+          preBind:
+            enabled:
+              - name: NodeNUMAResource
         schedulerName: koord-scheduler
