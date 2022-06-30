@@ -33,9 +33,11 @@ spec:
             - --authentication-skip-lookup=true
             - --leader-elect-resource-namespace={{ .Values.installation.namespace }}
             - --v={{ .Values.scheduler.log.level }}
-  {{- if .Values.scheduler.featureGates }}
+{{- if semverCompare "<= 1.20-0" .Capabilities.KubeVersion.Version }}
+            - --feature-gates={{ .Values.scheduler.compatibleFeatureGates }}
+{{- else }}
             - --feature-gates={{ .Values.scheduler.featureGates }}
-  {{- end }}
+{{- end }}
             - --config=/config/koord-scheduler.config
           command:
             - /koord-scheduler
