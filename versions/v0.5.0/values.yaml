@@ -13,12 +13,12 @@ installation:
 
 featureGates: ""
 
-imageRepositoryHost: ""
+imageRepositoryHost: ghcr.io
 
 koordlet:
   image:
-    repository: koordinatorsh/koordlet
-    tag: v0.4.1
+    repository: koordinator-sh/koordlet
+    tag: "0.5.0"
   resources:
     limits:
       cpu: 500m
@@ -38,8 +38,8 @@ manager:
 
   replicas: 2
   image:
-    repository: koordinatorsh/koord-manager
-    tag: v0.4.1
+    repository: koordinator-sh/koord-manager
+    tag: "0.5.0"
   webhook:
     port: 9876
   metrics:
@@ -81,8 +81,8 @@ scheduler:
 
   replicas: 2
   image:
-    repository: koordinatorsh/koord-scheduler
-    tag: v0.4.1
+    repository: koordinator-sh/koord-scheduler
+    tag: "0.5.0"
   port: 10251
 
   featureGates: ""
