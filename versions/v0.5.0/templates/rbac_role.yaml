@@ -161,6 +161,7 @@ rules:
 - apiGroups:
   - config.koordinator.sh
   - slo.koordinator.sh
+  - topology.node.k8s.io
   resources:
   - "*"
   verbs:
@@ -213,6 +214,7 @@ rules:
   - apiGroups:
       - config.koordinator.sh
       - slo.koordinator.sh
+      - topology.node.k8s.io
     resources:
       - '*'
     verbs:
@@ -286,6 +288,7 @@ rules:
 - apiGroups:
   - config.koordinator.sh
   - slo.koordinator.sh
+  - topology.node.k8s.io
   resources:
   - "*"
   verbs:
