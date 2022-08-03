@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: koord-descheduler-config
+  namespace: {{ .Values.installation.namespace }}
+data:
+  koord-descheduler-config: |
+    apiVersion: descheduler/v1alpha2
+    kind: DeschedulerConfiguration
+    enableContentionProfiling: true
+    enableProfiling: true
+    healthzBindAddress: 0.0.0.0:10251
+    metricsBindAddress: 0.0.0.0:10251
+    leaderElection:
+      resourceLock: leases
+      resourceName: koord-descheduler
+      resourceNamespace: {{ .Values.installation.namespace }}
+    deschedulingInterval: 10s
+    dryRun: false
+    profiles:
+    - name: koord-descheduler
+      plugins:
+        deschedule:
+          disabled:
+            - name: "*"
+        evict:
+          disabled:
+            - name: "*"
+          enabled:
+            - name: MigrationController
+      pluginConfig:
+      - name: MigrationController
+        args:
+          apiVersion: descheduler/v1alpha2
+          kind: MigrationControllerArgs
+          evictionPolicy: Eviction
