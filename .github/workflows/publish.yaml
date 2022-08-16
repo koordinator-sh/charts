@@ -4,7 +4,7 @@ name: Chart Publish
 on:
   push:
     tags:
-      - 'v*'
+      - 'koordinator-*'
 
 jobs:
   publish:
