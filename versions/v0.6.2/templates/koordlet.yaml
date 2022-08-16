@@ -69,6 +69,9 @@ spec:
             - mountPath: /host-sys/
               name: host-sys
               readOnly: true
+            - mountPath: /etc/kubernetes/
+              name: host-kubernetes
+              readOnly: true
       tolerations:
         - operator: Exists
       hostNetwork: true
@@ -100,3 +103,7 @@ spec:
             path: /sys/
             type: ""
           name: host-sys
+        - hostPath:
+            path: /etc/kubernetes/
+            type: ""
+          name: host-kubernetes
