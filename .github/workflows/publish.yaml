@@ -1,10 +1,11 @@
 ---
 name: Chart Publish
+
 on:
   push:
-    branches:
-      - main
-      - rewrite-build
+    tags:
+      - 'v*'
+
 jobs:
   publish:
     runs-on: ubuntu-latest
