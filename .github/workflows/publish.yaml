@@ -1,11 +1,10 @@
 ---
 name: Chart Publish
-
 on:
   push:
-    tags:
-      - 'koordinator-*'
-
+    branches:
+      - main
+      - rewrite-build
 jobs:
   publish:
     runs-on: ubuntu-latest
