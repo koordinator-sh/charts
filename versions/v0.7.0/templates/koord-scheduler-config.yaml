@@ -45,10 +45,16 @@ data:
               cpu: 80
               memory: 70
         plugins:
+          queueSort:
+            enabled:
+              - name: Coscheduling
+            disabled:
+              - name: "*"
           preFilter:
             enabled:
               - name: NodeNUMAResource
               - name: Reservation
+              - name: Coscheduling
           filter:
             enabled:
               - name: LoadAwareScheduling
@@ -59,6 +65,7 @@ data:
               - name: "*"
             enabled:
               - name: Reservation
+              - name: Coscheduling
 {{- if semverCompare "<= 1.20-0" .Capabilities.KubeVersion.Version }} 
               - name: CompatibleDefaultPreemption
 {{- else }}
@@ -77,6 +84,10 @@ data:
               - name: LoadAwareScheduling
               - name: NodeNUMAResource
               - name: Reservation
+              - name: Coscheduling
+          permit:
+            enabled:
+              - name: Coscheduling
           preBind:
             enabled:
               - name: NodeNUMAResource
@@ -87,4 +98,7 @@ data:
             enabled:
               - name: Reservation
               - name: DefaultBinder
+          postBind:
+            enabled:
+              - name: Coscheduling
         schedulerName: koord-scheduler
