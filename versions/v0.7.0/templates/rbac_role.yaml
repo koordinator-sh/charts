@@ -306,6 +306,7 @@ rules:
   - slo.koordinator.sh
   - scheduling.koordinator.sh
   - topology.node.k8s.io
+  - scheduling.sigs.k8s.io
   resources:
   - "*"
   verbs:
