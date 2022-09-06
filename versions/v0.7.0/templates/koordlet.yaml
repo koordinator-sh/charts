@@ -75,6 +75,9 @@ spec:
             - mountPath: /host-etc-hookserver/
               name: host-etc-hookserver
               mountPropagation: Bidirectional
+            - mountPath: /var/lib/kubelet
+              name: host-kubelet-rootdir
+              readOnly: true
       tolerations:
         - operator: Exists
       hostNetwork: true
@@ -114,3 +117,7 @@ spec:
             path: /etc/runtime/hookserver.d/
             type: ""
           name: host-etc-hookserver
+        - hostPath:
+            path: /var/lib/kubelet
+            type: ""
+          name: host-kubelet-rootdir
