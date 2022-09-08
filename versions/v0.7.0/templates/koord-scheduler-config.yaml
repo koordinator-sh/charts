@@ -71,6 +71,9 @@ data:
 {{- else }}
               - name: DefaultPreemption
 {{- end }}
+          preScore:
+            enabled:
+              - name: Reservation
           score:
             enabled:
               - name: LoadAwareScheduling
