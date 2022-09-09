@@ -32,6 +32,7 @@ spec:
           - -runtime-hooks=AllAlpha=true
           - -runtime-hooks-network=unix
           - -runtime-hooks-addr=/host-var-run-koordlet/koordlet.sock
+          - -runtime-hooks-host-endpoint={{ .Values.koordlet.volume.hostVarRunKoordlet }}koordlet.sock
           - --logtostderr=true
           - --v={{ .Values.koordlet.log.level }}
           image: {{ .Values.imageRepositoryHost }}/{{ .Values.koordlet.image.repository }}:{{ .Values.koordlet.image.tag }}
@@ -102,7 +103,7 @@ spec:
             type: ""
           name: host-var-run
         - hostPath:
-            path: /var/run/koordlet/
+            path: {{ .Values.koordlet.volume.hostVarRunKoordlet }}
             type: "DirectoryOrCreate"
           name: host-var-run-koordlet
         - hostPath:
@@ -110,14 +111,14 @@ spec:
             type: ""
           name: host-sys
         - hostPath:
-            path: /etc/kubernetes/
+            path: {{ .Values.koordlet.volume.hostKubernetes }}
             type: ""
           name: host-kubernetes
         - hostPath:
-            path: /etc/runtime/hookserver.d/
+            path: {{ .Values.koordlet.volume.hostHookServer }}
             type: ""
           name: host-etc-hookserver
         - hostPath:
-            path: /var/lib/kubelet
+            path: {{ .Values.koordlet.volume.hostKubeletRootdir }}
             type: ""
           name: host-kubelet-rootdir
