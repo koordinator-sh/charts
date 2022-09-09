@@ -29,11 +29,11 @@ koordlet:
   log:
     # log level for koordlet
     level: "4"
-  volume:
-    hostKubernetes: /etc/kubernetes/
-    hostKubeletRootdir: /var/lib/kubelet
-    hostHookServer: /etc/runtime/hookserver.d/
-    hostVarRunKoordlet: /var/run/koordlet/
+  hostDirs:
+    kubeletConfigDir: /etc/kubernetes/
+    kubeletLibDir: /var/lib/kubelet/
+    koordProxyRegisterDir: /etc/runtime/hookserver.d/
+    koordletSockDir: /var/run/koordlet/
 
 
 manager:
