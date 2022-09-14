@@ -244,6 +244,12 @@ rules:
 - apiGroups:
     - ""
   resources:
+    - pods/eviction
+  verbs:
+    - '*'
+- apiGroups:
+    - ""
+  resources:
     - events
   verbs:
     - '*'
