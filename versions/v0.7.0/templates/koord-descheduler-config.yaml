@@ -34,3 +34,9 @@ data:
           apiVersion: descheduler/v1alpha2
           kind: MigrationControllerArgs
           evictionPolicy: Eviction
+          namespaces:
+            exclude:
+              - kube-system
+              - {{ .Values.installation.namespace }}
+          evictQPS: "10"
+          evictBurst: 1
