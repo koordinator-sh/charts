@@ -57,6 +57,7 @@ spec:
             - --v={{ .Values.manager.log.level }}
             - --feature-gates={{ .Values.featureGates }}
             - --sync-period={{ .Values.manager.resyncPeriod }}
+            - --config-namespace={{ .Values.installation.namespace }}
           command:
             - /koord-manager
           image: {{ .Values.imageRepositoryHost }}/{{ .Values.manager.image.repository }}:{{ .Values.manager.image.tag }}

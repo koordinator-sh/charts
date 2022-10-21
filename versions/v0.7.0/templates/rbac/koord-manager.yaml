@@ -159,6 +159,7 @@ rules:
   - list
   - watch
 - apiGroups:
+  - scheduling.koordinator.sh
   - config.koordinator.sh
   - slo.koordinator.sh
   - topology.node.k8s.io
