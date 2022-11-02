@@ -1,0 +1,140 @@
+# Default values for koordinator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+crds:
+  managed: true
+
+# values for koordinator installation
+installation:
+  namespace: koordinator-system
+  roleListGroups:
+    - '*'
+
+featureGates: ""
+
+imageRepositoryHost: registry.cn-beijing.aliyuncs.com
+
+koordlet:
+  image:
+    repository: koordinator-sh/koordlet
+    tag: "1.0.0"
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: "0"
+      memory: "0"
+  log:
+    # log level for koordlet
+    level: "4"
+  hostDirs:
+    kubeletConfigDir: /etc/kubernetes/
+    kubeletLibDir: /var/lib/kubelet/
+    koordProxyRegisterDir: /etc/runtime/hookserver.d/
+    koordletSockDir: /var/run/koordlet
+
+
+manager:
+  # settings for log print
+  log:
+    # log level for koord-manager
+    level: "4"
+
+  replicas: 2
+  image:
+    repository: koordinator-sh/koord-manager
+    tag: "1.0.0"
+  webhook:
+    port: 9876
+  metrics:
+    port: 8080
+  healthProbe:
+    port: 8000
+
+  resyncPeriod: "0"
+
+  # resources of koord-manager container
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+
+  hostNetwork: false
+
+  nodeAffinity: {}
+  nodeSelector: {}
+  tolerations: []
+
+webhookConfiguration:
+  failurePolicy:
+    pods: Ignore
+    elasticquotas: Ignore
+  timeoutSeconds: 30
+
+serviceAccount:
+  annotations: {}
+
+
+scheduler:
+  # settings for log print
+  log:
+    # log level for koord-scheduler
+    level: "4"
+
+  replicas: 2
+  image:
+    repository: koordinator-sh/koord-scheduler
+    tag: "1.0.0"
+  port: 10251
+
+  featureGates: ""
+  compatibleFeatureGates: "CSIStorageCapacity=false"
+
+  # resources of koord-scheduler container
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+
+  hostNetwork: false
+
+  nodeAffinity: {}
+  nodeSelector: {}
+  tolerations: []
+
+descheduler:
+  # settings for log print
+  log:
+    # log level for koord-descheduler
+    level: "4"
+
+  replicas: 2
+  image:
+    repository: koordinator-sh/koord-descheduler
+    tag: "1.0.0"
+  port: 10251
+
+  featureGates: ""
+
+  # resources of koord-descheduler container
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+
+  hostNetwork: false
+
+  nodeAffinity: {}
+  nodeSelector: {}
+  tolerations: []
