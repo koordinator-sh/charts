@@ -29,11 +29,12 @@ spec:
             - /koordlet
           args:
           - -cgroup-root-dir=/host-cgroup/
-          - -feature-gates=BECPUEvict=true,BEMemoryEvict=true,CgroupReconcile=true,Accelerators=true
+{{- if .Values.koordlet.features }}
+          - -feature-gates={{ .Values.koordlet.features }}
+{{- else }}
           # other feature-gates enabled by default include BECPUSuppress, CPUBurst, RdtResctrl and NodeTopologyReport
-          - -runtime-hooks=AllAlpha=true
-          - -runtime-hooks-network=unix
-          - -runtime-hooks-addr=/host-var-run-koordlet/koordlet.sock
+          - -feature-gates=BECPUEvict=true,BEMemoryEvict=true,CgroupReconcile=true,Accelerators=true
+{{- end }}
           - -runtime-hooks-host-endpoint={{ .Values.koordlet.hostDirs.koordletSockDir }}/koordlet.sock
           - --logtostderr=true
           - --v={{ .Values.koordlet.log.level }}
