@@ -55,6 +55,10 @@ spec:
               add:
                 - SYS_ADMIN
             privileged: true
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "/bin/sh","-c","rm -rf /host-etc-hookserver/koordlet.json" ]
           volumeMounts:
             - mountPath: /etc/localtime
               name: host-time
