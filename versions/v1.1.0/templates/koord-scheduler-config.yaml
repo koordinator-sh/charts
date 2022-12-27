@@ -25,9 +25,9 @@ data:
                   weight: 1
                 - name: memory
                   weight: 1
-                - name: "koordinator.sh/batch-cpu"
+                - name: "kubernetes.io/batch-cpu"
                   weight: 1
-                - name: "koordinator.sh/batch-mem"
+                - name: "kubernetes.io/batch-memory"
                   weight: 1
         - name: LoadAwareScheduling
           args:
@@ -41,6 +41,20 @@ data:
             usageThresholds:
               cpu: 65
               memory: 95
+            # disable by default
+            # prodUsageThresholds indicates the resource utilization threshold of Prod Pods compared to the whole machine.
+            # prodUsageThresholds:
+            #   cpu: 55
+            #   memory: 75
+            # scoreAccordingProdUsage controls whether to score according to the utilization of Prod Pod
+            # scoreAccordingProdUsage: true
+            # aggregated supports resource utilization filtering and scoring based on percentile statistics
+            # aggregated:
+            #   usageThresholds:
+            #     cpu: 65
+            #     memory: 95
+            #   usageAggregationType: "p95"
+            #   scoreAggregationType: "p95"
             estimatedScalingFactors:
               cpu: 85
               memory: 70

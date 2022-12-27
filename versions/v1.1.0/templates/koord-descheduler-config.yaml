@@ -23,6 +23,10 @@ data:
         deschedule:
           disabled:
             - name: "*"
+        # disable LowNodeLoad by default
+        # balance:
+        #   enabled:
+        #   - name: LowNodeLoad
         evict:
           disabled:
             - name: "*"
@@ -40,3 +44,18 @@ data:
               - {{ .Values.installation.namespace }}
           evictQPS: "10"
           evictBurst: 1
+      - name: LowNodeLoad
+        args:
+          apiVersion: descheduler/v1alpha2
+          kind: LowNodeLoadArgs
+          evictableNamespaces:
+            exclude:
+              - kube-system
+              - {{ .Values.installation.namespace }}
+          useDeviationThresholds: false
+          lowThresholds:
+            cpu: 45
+            memory: 55
+          highThresholds:
+            cpu: 75
+            memory: 80
