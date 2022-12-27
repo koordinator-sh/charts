@@ -29,7 +29,8 @@ spec:
             - /koordlet
           args:
           - -cgroup-root-dir=/host-cgroup/
-          - -feature-gates=AllAlpha=true,PerformanceCollector=false
+          - -feature-gates=BECPUEvict=true,BEMemoryEvict=true,CgroupReconcile=true,Accelerators=true
+          # other feature-gates enabled by default include BECPUSuppress, CPUBurst, RdtResctrl and NodeTopologyReport
           - -runtime-hooks=AllAlpha=true
           - -runtime-hooks-network=unix
           - -runtime-hooks-addr=/host-var-run-koordlet/koordlet.sock
