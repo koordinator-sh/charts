@@ -1,0 +1,181 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: koordinator-mutating-webhook-configuration
+  annotations:
+    template: ""
+webhooks:
+{{ if contains "PodMutatingWebhook=false" .Values.featureGates }}{{ else }}
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: koordinator-webhook-service
+      namespace: {{ .Values.installation.namespace }}
+      path: /mutate-pod
+  failurePolicy: {{ .Values.webhookConfiguration.failurePolicy.pods }}
+  admissionReviewVersions:
+  - v1
+  - v1beta1
+  sideEffects: None
+  timeoutSeconds: {{ .Values.webhookConfiguration.timeoutSeconds }}
+  name: mpod.kb.io
+  namespaceSelector:
+    matchExpressions:
+    - key: control-plane
+      operator: DoesNotExist
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    resources:
+    - pods
+{{- end }}
+{{ if contains "ElasticMutatingWebhook=false" .Values.featureGates }}{{ else }}
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: koordinator-webhook-service
+      namespace: {{ .Values.installation.namespace }}
+      path: /mutate-scheduling-sigs-k8s-io-v1alpha1-elasticquota
+  failurePolicy: {{ .Values.webhookConfiguration.failurePolicy.elasticquotas }}
+  admissionReviewVersions:
+  - v1
+  - v1beta1
+  sideEffects: None
+  timeoutSeconds: {{ .Values.webhookConfiguration.timeoutSeconds }}
+  name: melasticquota.kb.io
+  namespaceSelector:
+    matchExpressions:
+    - key: control-plane
+      operator: DoesNotExist
+  rules:
+  - apiGroups:
+    - scheduling.sigs.k8s.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    resources:
+    - elasticquotas
+{{- end }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: koordinator-validating-webhook-configuration
+  annotations:
+    template: ""
+webhooks:
+{{- if contains "ConfigMapValidatingWebhook=true" .Values.featureGates }}
+- admissionReviewVersions:
+  - v1beta1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: system
+      path: /validate-configmap
+  failurePolicy: Fail
+  name: vconfigmap.kb.io
+  objectSelector:
+    matchExpressions:
+    - key: koordinator.sh/configmap-type
+      operator: In
+      values:
+      - slo-controller-config
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    - DELETE
+    resources:
+    - configmaps
+  sideEffects: None
+{{- end }}
+{{- if contains "NodeValidatingWebhook=true" .Values.featureGates }}
+- admissionReviewVersions:
+  - v1
+  - v1beta1
+  clientConfig:
+    service:
+      name: webhook-service
+      namespace: system
+      path: /validate-node
+  failurePolicy: Fail
+  name: vnode.kb.io
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - nodes
+  sideEffects: None
+{{- end }}
+{{- if contains "PodValidatingWebhook=false" .Values.featureGates }}{{ else }}
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: koordinator-webhook-service
+      namespace: {{ .Values.installation.namespace }}
+      path: /validate-pod
+  failurePolicy: {{ .Values.webhookConfiguration.failurePolicy.pods }}
+  admissionReviewVersions:
+  - v1
+  - v1beta1
+  sideEffects: None
+  timeoutSeconds: {{ .Values.webhookConfiguration.timeoutSeconds }}
+  name: vpod.kb.io
+  namespaceSelector:
+    matchExpressions:
+    - key: control-plane
+      operator: DoesNotExist
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - pods
+{{- end }}
+{{- if contains "ElasticValidatingWebhook=false" .Values.featureGates }}{{ else }}
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: koordinator-webhook-service
+      namespace: {{ .Values.installation.namespace }}
+      path: /validate-scheduling-sigs-k8s-io-v1alpha1-elasticquota
+  failurePolicy: {{ .Values.webhookConfiguration.failurePolicy.elasticquotas }}
+  admissionReviewVersions:
+  - v1
+  - v1beta1
+  sideEffects: None
+  timeoutSeconds: {{ .Values.webhookConfiguration.timeoutSeconds }}
+  name: velasticquota.kb.io
+  namespaceSelector:
+    matchExpressions:
+    - key: control-plane
+      operator: DoesNotExist
+  rules:
+  - apiGroups:
+    - scheduling.sigs.k8s.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - elasticquotas
+{{- end }}
