@@ -36,6 +36,8 @@ koordlet:
     koordProxyRegisterDir: /etc/runtime/hookserver.d/
     koordletSockDir: /var/run/koordlet
     predictionCheckpointDir: /var/run/koordlet/prediction-checkpoints
+    # if not specified, use tmpfs by default
+    koordletTSDBDir: ""
   enableServiceMonitor: false
 
 
