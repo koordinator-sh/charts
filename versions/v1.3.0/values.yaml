@@ -97,10 +97,10 @@ scheduler:
 
   # feature-gates for k8s > 1.22
   featureGates: ""
-  # compatible feature-gates for k8s >= 1.20, <= 1.22
-  compatible120To122FeatureGates: "DisableCSIStorageCapacityInformer=true,CompatiblePodDisruptionBudget=true"
-  # compatible feature-gates for k8s < 1.20
-  compatibleBelow120FeatureGates: "DisableCSIStorageCapacityInformer=true,DisablePodDisruptionBudgetInformer=true"
+  # feature-gates for k8s 1.22
+  compatible122FeatureGates: "CompatibleCSIStorageCapacity=true"
+  # feature-gates for k8s < 1.22
+  compatibleBelow122FeatureGates: "DisableCSIStorageCapacityInformer=true,CompatiblePodDisruptionBudget=true"
 
   # resources of koord-scheduler container
   resources:
