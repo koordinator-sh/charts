@@ -71,9 +71,9 @@ data:
               - name: Coscheduling
           preFilter:
             enabled:
+              - name: Reservation
               - name: NodeNUMAResource
               - name: DeviceShare
-              - name: Reservation
               - name: Coscheduling
               - name: ElasticQuota
           filter:
@@ -92,7 +92,7 @@ data:
               - name: DefaultPreemption
           preScore:
             enabled:
-              - name: Reservation
+              - name: Reservation # The Reservation plugin must come first
           score:
             enabled:
               - name: LoadAwareScheduling
@@ -105,10 +105,10 @@ data:
                 weight: 5000
           reserve:
             enabled:
+              - name: Reservation # The Reservation plugin must come first
               - name: LoadAwareScheduling
               - name: NodeNUMAResource
               - name: DeviceShare
-              - name: Reservation
               - name: Coscheduling
               - name: ElasticQuota
           permit:
