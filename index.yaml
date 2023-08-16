@@ -2,6 +2,24 @@ apiVersion: v1
 entries:
   koordinator:
   - apiVersion: v2
+    appVersion: 1.3.0
+    created: "2023-08-16T10:26:50.668375819Z"
+    description: A Helm chart for Koordinator
+    digest: 5c20146ba80e6a279ff1a7689a88130b1161dac9fefc80b15f3d8ab01ba12678
+    home: https://koordinator.sh
+    icon: https://koordinator.sh/img/logo.svg
+    keywords:
+    - koordinator
+    - co-location
+    - mixed-workloads
+    name: koordinator
+    sources:
+    - https://github.com/koordinator-sh/koordinator
+    type: application
+    urls:
+    - https://github.com/koordinator-sh/charts/releases/download/koordinator-1.3.0/koordinator-1.3.0.tgz
+    version: 1.3.0
+  - apiVersion: v2
     appVersion: 1.2.0
     created: "2023-04-07T09:17:56.492574653Z"
     description: A Helm chart for Koordinator
@@ -253,4 +271,4 @@ entries:
     urls:
     - https://github.com/koordinator-sh/charts/releases/download/koordinator-0.1.0/koordinator-0.1.0.tgz
     version: 0.1.0
-generated: "2023-04-07T09:17:56.492680854Z"
+generated: "2023-08-16T10:26:50.668503319Z"
