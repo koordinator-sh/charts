@@ -148,6 +148,13 @@ spec:
             path: /dev
             type: ""
           name: host-dev
+{{- if .Values.koordlet.hostDirs.koordletTSDBDir }}
+        - hostPath:
+            path: {{ .Values.koordlet.hostDirs.koordletTSDBDir }}
+            type: ""
+{{- else }}
         - emptyDir:
+            medium: Memory
             sizeLimit: 150Mi
+{{- end }}
           name: metric-db-path
