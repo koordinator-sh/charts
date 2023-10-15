@@ -51,6 +51,8 @@ The following table lists the configurable parameters of the chart and their def
 | `koordlet.resources.limits.memory`        | Memory resource limit of koordlet container                      | `256Mi`                         |
 | `koordlet.resources.requests.cpu`         | CPU resource request of koordlet container                       | `0`                             |
 | `koordlet.resources.requests.memory`      | Memory resource request of koordlet container                    | `0`                             |
+| `koordlet.runtimeClassName`               | Specify runtimeClassName, like `nvidia`                          | ``                              |
+| `koordlet.nodeAffinity`                   | Specify affinity to allow koordlet be scheduled to certain nodes | `{}`                            |
 | `webhookConfiguration.failurePolicy.pods` | The failurePolicy for pods in mutating webhook configuration     | `Ignore`                        |
 | `webhookConfiguration.timeoutSeconds`     | The timeoutSeconds for all webhook configuration                 | `30`                            |
 | `crds.managed`                            | Koordinator will not install CRDs with chart if this is false    | `true`                          |

@@ -39,7 +39,8 @@ koordlet:
     # if not specified, use tmpfs by default
     koordletTSDBDir: ""
   enableServiceMonitor: false
-
+  runtimeClassName: ""
+  nodeAffinity: {}
 
 manager:
   # settings for log print
