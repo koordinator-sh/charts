@@ -1,16 +1,5 @@
 apiVersion: v1
 entries:
-  hadoop-yarn:
-  - apiVersion: v2
-    appVersion: 3.3.2
-    created: "2023-11-15T09:35:22.631675651Z"
-    description: A Helm chart for hadoop yarn.
-    digest: 8f72d8cc330b5a79d34ce13f1913b28b226e46e5da53f06abd2e390a1ea95fd8
-    name: hadoop-yarn
-    type: application
-    urls:
-    - https://github.com/koordinator-sh/charts/releases/download/hadoop-yarn-3.3.2/hadoop-yarn-3.3.2.tgz
-    version: 3.3.2
   koordinator:
   - apiVersion: v2
     appVersion: 1.3.0
@@ -282,4 +271,15 @@ entries:
     urls:
     - https://github.com/koordinator-sh/charts/releases/download/koordinator-0.1.0/koordinator-0.1.0.tgz
     version: 0.1.0
-generated: "2023-11-15T09:35:22.631748066Z"
+  koordinator-yarn-operator:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2023-11-15T09:35:37.143360371Z"
+    description: A Helm chart for colocation k8s with hadoop yarn.
+    digest: 359b2c09eeeba4006866e38e9d28cd7bcb456f292fcfeb1e8db7cf95b6a42660
+    name: koordinator-yarn-operator
+    type: application
+    urls:
+    - https://github.com/koordinator-sh/charts/releases/download/koordinator-yarn-operator-0.1.0/koordinator-yarn-operator-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-11-15T09:35:37.143467371Z"
