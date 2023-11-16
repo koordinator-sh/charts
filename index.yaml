@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   hadoop-yarn:
   - apiVersion: v2
+    appVersion: 3.3.3
+    created: "2023-11-16T04:14:00.120733202Z"
+    description: A Helm chart for hadoop yarn.
+    digest: 2c23b23bce02f53e439a30f607d54b70bfe9ff7a69866028c748551bce8686b9
+    name: hadoop-yarn
+    type: application
+    urls:
+    - https://github.com/koordinator-sh/charts/releases/download/hadoop-yarn-3.3.3/hadoop-yarn-3.3.3.tgz
+    version: 3.3.3
+  - apiVersion: v2
     appVersion: 3.3.2-1.0
     created: "2023-11-15T11:00:47.670468024Z"
     description: A Helm chart for hadoop yarn.
@@ -293,4 +303,4 @@ entries:
     urls:
     - https://github.com/koordinator-sh/charts/releases/download/koordinator-yarn-operator-0.1.0/koordinator-yarn-operator-0.1.0.tgz
     version: 0.1.0
-generated: "2023-11-15T11:00:47.670553824Z"
+generated: "2023-11-16T04:14:00.120811679Z"
