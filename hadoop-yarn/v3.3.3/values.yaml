@@ -2,12 +2,12 @@ installation:
   namespace: hadoop-yarn
 
 image:
-  repository: registry.cn-hangzhou.aliyuncs.com/koordinator-sh/apache-hadoop
-  tag: 3.3.2-v1.0
+  repository: registry.cn-beijing.aliyuncs.com/koordinator-sh/apache-hadoop
+  tag: 3.3.3-v1.0
   pullPolicy: Always
 
 # The version of the hadoop libraries being used in the image.
-hadoopVersion: 3.3.2
+hadoopVersion: 3.3.3
 logLevel: INFO
 
 yarn:
