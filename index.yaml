@@ -292,6 +292,17 @@ entries:
     urls:
     - https://github.com/koordinator-sh/charts/releases/download/koordinator-0.1.0/koordinator-0.1.0.tgz
     version: 0.1.0
+  koordinator-yarn-copilot:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2023-11-17T06:45:07.170696639Z"
+    description: A Helm chart for colocation k8s with hadoop yarn.
+    digest: 29cdc9d5bf4bb1cbe91582d88eb5a08762e9a4561769a5af7b8d52294e0a8e64
+    name: koordinator-yarn-copilot
+    type: application
+    urls:
+    - https://github.com/koordinator-sh/charts/releases/download/koordinator-yarn-copilot-0.1.0/koordinator-yarn-copilot-0.1.0.tgz
+    version: 0.1.0
   koordinator-yarn-operator:
   - apiVersion: v2
     appVersion: 0.1.0
@@ -303,4 +314,4 @@ entries:
     urls:
     - https://github.com/koordinator-sh/charts/releases/download/koordinator-yarn-operator-0.1.0/koordinator-yarn-operator-0.1.0.tgz
     version: 0.1.0
-generated: "2023-11-16T04:14:00.120811679Z"
+generated: "2023-11-17T06:45:07.170768473Z"
