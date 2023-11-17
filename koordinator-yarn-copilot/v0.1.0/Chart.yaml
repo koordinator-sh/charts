@@ -1,5 +1,5 @@
 apiVersion: v2
-name: koordinator-yarn-operator
+name: koordinator-yarn-copilot
 description: A Helm chart for colocation k8s with hadoop yarn.
 type: application
 version: 0.1.0
