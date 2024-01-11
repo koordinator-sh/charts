@@ -18,7 +18,7 @@ webhooks:
   - v1beta1
   sideEffects: None
   timeoutSeconds: {{ .Values.webhookConfiguration.timeoutSeconds }}
-  name: mpod-create.koordinator.sh
+  name: mpod.kb.io
   namespaceSelector:
     matchExpressions:
     - key: control-plane
@@ -32,38 +32,6 @@ webhooks:
     - CREATE
     resources:
     - pods
-- admissionReviewVersions:
-  - v1
-  - v1beta1
-  clientConfig:
-    caBundle: Cg==
-    service:
-      name: koordinator-webhook-service
-      namespace: {{ .Values.installation.namespace }}
-      path: /mutate-pod
-  failurePolicy: {{ .Values.webhookConfiguration.failurePolicy.pods }}
-  name: mpod-update.koordinator.sh
-  namespaceSelector:
-    matchExpressions:
-    - key: control-plane
-      operator: DoesNotExist
-  objectSelector:
-    matchExpressions:
-    - key: pod.koordinator.sh/mutating-update
-      operator: In
-      values:
-        - "true"
-  rules:
-  - apiGroups:
-    - ""
-    apiVersions:
-    - v1
-    operations:
-    - UPDATE
-    resources:
-    - pods
-  sideEffects: None
-  timeoutSeconds: {{ .Values.webhookConfiguration.timeoutSeconds }}
 {{- end }}
 {{ if contains "ElasticMutatingWebhook=false" .Values.featureGates }}{{ else }}
 - clientConfig:
@@ -78,7 +46,7 @@ webhooks:
   - v1beta1
   sideEffects: None
   timeoutSeconds: {{ .Values.webhookConfiguration.timeoutSeconds }}
-  name: melasticquota.koordinator.sh
+  name: melasticquota.kb.io
   namespaceSelector:
     matchExpressions:
     - key: control-plane
@@ -93,31 +61,6 @@ webhooks:
     resources:
     - elasticquotas
 {{- end }}
-{{ if contains "NodeMutatingWebhook=true" .Values.featureGates }}
-- admissionReviewVersions:
-  - v1
-  - v1beta1
-  clientConfig:
-    caBundle: Cg==
-    service:
-      name: koordinator-webhook-service
-      namespace: {{ .Values.installation.namespace }}
-      path: /mutate-node-status
-  failurePolicy: {{ .Values.webhookConfiguration.failurePolicy.nodes }}
-  name: mnode-status.koordinator.sh
-  rules:
-  - apiGroups:
-    - ""
-    apiVersions:
-    - v1
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - nodes/status
-  timeoutSeconds: {{ .Values.webhookConfiguration.timeoutSeconds }}
-  sideEffects: None
-{{- end }}
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
@@ -131,11 +74,11 @@ webhooks:
   - v1beta1
   clientConfig:
     service:
-      name: koordinator-webhook-service
-      namespace: {{ .Values.installation.namespace }}
+      name: webhook-service
+      namespace: system
       path: /validate-configmap
   failurePolicy: Fail
-  name: vconfigmap.koordinator.sh
+  name: vconfigmap.kb.io
   objectSelector:
     matchExpressions:
     - key: koordinator.sh/configmap-type
@@ -161,12 +104,11 @@ webhooks:
   - v1beta1
   clientConfig:
     service:
-      name: koordinator-webhook-service
-      namespace: {{ .Values.installation.namespace }}
+      name: webhook-service
+      namespace: system
       path: /validate-node
-  failurePolicy: {{ .Values.webhookConfiguration.failurePolicy.nodes }}
-  timeoutSeconds: {{ .Values.webhookConfiguration.timeoutSeconds }}
-  name: vnode.koordinator.sh
+  failurePolicy: Fail
+  name: vnode.kb.io
   rules:
   - apiGroups:
     - ""
@@ -192,7 +134,7 @@ webhooks:
   - v1beta1
   sideEffects: None
   timeoutSeconds: {{ .Values.webhookConfiguration.timeoutSeconds }}
-  name: vpod.koordinator.sh
+  name: vpod.kb.io
   namespaceSelector:
     matchExpressions:
     - key: control-plane
@@ -221,7 +163,7 @@ webhooks:
   - v1beta1
   sideEffects: None
   timeoutSeconds: {{ .Values.webhookConfiguration.timeoutSeconds }}
-  name: velasticquota.koordinator.sh
+  name: velasticquota.kb.io
   namespaceSelector:
     matchExpressions:
     - key: control-plane
@@ -234,7 +176,6 @@ webhooks:
     operations:
     - CREATE
     - UPDATE
-    - DELETE
     resources:
     - elasticquotas
 {{- end }}
