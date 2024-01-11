@@ -52,6 +52,9 @@ The following table lists the configurable parameters of the chart and their def
 | `koordlet.resources.requests.cpu`         | CPU resource request of koordlet container                       | `0`                             |
 | `koordlet.resources.requests.memory`      | Memory resource request of koordlet container                    | `0`                             |
 | `webhookConfiguration.failurePolicy.pods` | The failurePolicy for pods in mutating webhook configuration     | `Ignore`                        |
+| `webhookConfiguration.failurePolicy.elasticquotas` | The failurePolicy for elasticQuotas in all webhook configuration              | `Ignore`                        |
+| `webhookConfiguration.failurePolicy.nodeStatus` | The failurePolicy for node.status in all webhook configuration              | `Ignore`                        |
+| `webhookConfiguration.failurePolicy.nodes` | The failurePolicy for nodes in all webhook configuration              | `Ignore`                        |
 | `webhookConfiguration.timeoutSeconds`     | The timeoutSeconds for all webhook configuration                 | `30`                            |
 | `crds.managed`                            | Koordinator will not install CRDs with chart if this is false    | `true`                          |
 | `imagePullSecrets`                        | The list of image pull secrets for koordinator image             | `false`                         |
