@@ -103,7 +103,7 @@ webhooks:
       name: koordinator-webhook-service
       namespace: {{ .Values.installation.namespace }}
       path: /mutate-node-status
-  failurePolicy: {{ .Values.webhookConfiguration.failurePolicy.nodes }}
+  failurePolicy: {{ .Values.webhookConfiguration.failurePolicy.nodeStatus }}
   name: mnode-status.koordinator.sh
   rules:
   - apiGroups:
