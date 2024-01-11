@@ -80,6 +80,7 @@ webhookConfiguration:
     pods: Ignore
     elasticquotas: Ignore
     nodeStatus: Ignore
+    nodes: Ignore
   timeoutSeconds: 30
 
 serviceAccount:
