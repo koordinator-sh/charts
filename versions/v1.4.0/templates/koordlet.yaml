@@ -95,6 +95,13 @@ spec:
               name: metric-db-path
       tolerations:
         - operator: Exists
+{{- if .Values.koordlet.runtimeClassName }}
+      runtimeClassName: {{ .Values.koordlet.runtimeClassName }}
+{{- end }}
+{{- if .Values.koordlet.nodeAffinity }}
+      affinity:
+        {{- toYaml .Values.koordlet.nodeAffinity | nindent 8 }}
+{{- end }}
       hostNetwork: true
       hostPID: true
       terminationGracePeriodSeconds: 10
