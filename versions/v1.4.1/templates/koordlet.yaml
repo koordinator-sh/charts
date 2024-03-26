@@ -93,6 +93,10 @@ spec:
               mountPropagation: HostToContainer
             - mountPath: /metric-data/
               name: metric-db-path
+{{- if contains "TerwayQoS=true" .Values.koordlet.features }}
+            - mountPath: /host-var-lib/terway/qos
+              name: host-terway-qos
+{{- end }}
       tolerations:
         - operator: Exists
       hostNetwork: true
@@ -158,3 +162,9 @@ spec:
             sizeLimit: 150Mi
 {{- end }}
           name: metric-db-path
+{{- if contains "TerwayQoS=true" .Values.koordlet.features }}
+        - hostPath: 
+            path: /var/lib/terway/qos
+            type: "DirectoryOrCreate"
+          name: host-terway-qos
+{{- end }}
