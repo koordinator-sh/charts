@@ -1,0 +1,26 @@
+apiVersion: config.koordinator.sh/v1alpha1
+kind: ClusterColocationProfile
+metadata:
+  name: colocation-profile-example
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # clusterColocationProfile is considered part of the release.
+    "helm.sh/hook": post-install,post-upgrade
+spec:
+  namespaceSelector:
+    matchLabels:
+      koordinator.sh/enable-colocation: "true"
+  selector:
+    matchLabels:
+      koordinator.sh/enable-colocation: "true"
+  qosClass: BE
+  priorityClassName: koord-batch
+  koordinatorPriority: 1000
+  schedulerName: koord-scheduler
+  labels:
+    koordinator.sh/mutated: "true"
+  annotations:
+    koordinator.sh/intercepted: "true"
+  patch:
+    spec:
+      terminationGracePeriodSeconds: 30
