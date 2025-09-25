@@ -1,0 +1,51 @@
+{{- if .Values.daemon.vgpuMonitor.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "hami-daemon.fullname" . }}-vgpu-monitor
+  labels:
+  {{- include "hami-daemon.labels" . | nindent 4 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "hami-daemon.fullname" . }}-vgpu-monitor
+  labels:
+  {{- include "hami-daemon.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: '{{ include "hami-daemon.fullname" . }}-vgpu-monitor'
+subjects:
+- kind: ServiceAccount
+  name: '{{ include "hami-daemon.fullname" . }}-vgpu-monitor'
+  namespace: '{{ .Release.Namespace }}'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "hami-daemon.fullname" . }}-vgpu-monitor
+  labels:
+  {{- include "hami-daemon.labels" . | nindent 4 }}
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+  - create
+  - watch
+  - list
+  - update
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs:
+  - get
+  - update
+  - list
+  - patch
+{{- end }}
