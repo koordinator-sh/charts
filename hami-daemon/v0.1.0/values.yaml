@@ -1,0 +1,48 @@
+daemon:
+  # Configure which nodes to enable GPU share functionality.
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: koordinator.sh/gpu-isolation-provider
+            operator: In
+            values:
+            - HAMi-core
+  tolerations:
+  - operator: Exists
+  hamiCore:
+    libvgpuSoVersion: v2.6.0
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        add:
+        - SYS_ADMIN
+        drop:
+        - ALL
+    image:
+      repository: docker.m.daocloud.io/projecthami/hami
+      tag: v2.6.0
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        cpu: 200m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+
+  vgpuMonitor:
+    # Whether to enable vGPU monitor.
+    enabled: true
+    env:
+      hookPath: /usr/local/vgpu
+      nvidiaMigMonitorDevices: all
+      nvidiaVisibleDevices: all
+    ports:
+    - name: metrics
+      port: 9394
+      protocol: TCP
+      targetPort: 9394
+    type: ClusterIP
+kubernetesClusterDomain: cluster.local
