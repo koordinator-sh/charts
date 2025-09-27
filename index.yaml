@@ -21,6 +21,17 @@ entries:
     urls:
     - https://github.com/koordinator-sh/charts/releases/download/hadoop-yarn-3.3.2-1.0/hadoop-yarn-3.3.2-1.0.tgz
     version: 3.3.2-1.0
+  hami-daemon:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2025-09-27T08:31:59.385278634Z"
+    description: A Helm chart for Kubernetes
+    digest: 8008443a983bff536481f0e428267ecb080acbfadc139da1247e464622c80062
+    name: hami-daemon
+    type: application
+    urls:
+    - https://github.com/koordinator-sh/charts/releases/download/hami-daemon-0.1.0/hami-daemon-0.1.0.tgz
+    version: 0.1.0
   koordinator:
   - apiVersion: v2
     appVersion: 1.6.0
@@ -386,4 +397,4 @@ entries:
     urls:
     - https://github.com/koordinator-sh/charts/releases/download/koordinator-yarn-operator-0.1.0/koordinator-yarn-operator-0.1.0.tgz
     version: 0.1.0
-generated: "2025-02-21T09:09:46.570789897Z"
+generated: "2025-09-27T08:31:59.38538915Z"
