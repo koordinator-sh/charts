@@ -38,6 +38,7 @@ spec:
 {{- end }}
           - -runtime-hooks-host-endpoint={{ .Values.koordlet.hostDirs.koordletSockDir }}/koordlet.sock
           - --logtostderr=true
+          - --evict-by-copilot-agent=true
           - --v={{ .Values.koordlet.log.level }}
           image: "{{ .Values.imageRepositoryHost }}/{{ .Values.koordlet.image.repository }}:{{ .Values.koordlet.image.tag }}"
           imagePullPolicy: Always
@@ -101,6 +102,30 @@ spec:
               mountPropagation: HostToContainer
             - mountPath: /metric-data/
               name: metric-db-path
+            - mountPath: /var/run/yarn-copilot/
+              name: yarn-copilot
+{{- if .Values.koordYarnCopilotAgent.enabled }}
+        - name: yarn-copilot-agent
+          command:
+            - /yarn-copilot-agent
+          args:
+            - --server-endpoint={{.Values.koordYarnCopilotAgent.serverEndpoint}}
+            - --yarn-container-cgroup-path={{.Values.koordYarnCopilotAgent.yarnContainerCgroupPath}}
+            - --node-manager-endpoint={{.Values.koordYarnCopilotAgent.nodeManagerEndpoint}}
+            - --sync-memory-cgroup={{.Values.koordYarnCopilotAgent.syncMemoryCgroup}}
+            - --sync-cgroup-period={{.Values.koordYarnCopilotAgent.syncCgroupPeriod}}
+            - --cgroup-root-dir={{.Values.koordYarnCopilotAgent.cgroupRootDir}}
+            - --v={{ .Values.koordYarnCopilotAgent.log.level }}
+          image: "{{ .Values.imageRepositoryHost }}/{{ .Values.koordYarnCopilotAgent.image.repository }}:{{ .Values.koordYarnCopilotAgent.image.tag }}"
+          imagePullPolicy: Always
+          resources:
+                      {{- toYaml .Values.koordYarnCopilotAgent.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /host-cgroup/
+              name: host-cgroup-root
+            - mountPath: /var/run/yarn-copilot/
+              name: yarn-copilot
+{{- end }}
 {{- if .Values.koordlet.runtimeClassName }}
       runtimeClassName: {{ .Values.koordlet.runtimeClassName }}
 {{- end }}
@@ -183,3 +208,7 @@ spec:
             sizeLimit: 150Mi
 {{- end }}
           name: metric-db-path
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 50Mi
+          name: yarn-copilot
