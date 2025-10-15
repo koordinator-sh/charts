@@ -89,6 +89,7 @@ spec:
             - mountPath: /var/lib/kubelet
               name: host-kubelet-rootdir
               readOnly: true
+              mountPropagation: HostToContainer
             - mountPath: /var/run/koordlet/pod-resources/
               mountPropagation: Bidirectional
               name: pod-resources-proxy
@@ -101,6 +102,11 @@ spec:
               mountPropagation: HostToContainer
             - mountPath: /metric-data/
               name: metric-db-path
+            - mountPath: /var/run/koordlet/xpu-device-infos/
+              mountPropagation: Bidirectional
+              name: xpu-device-infos
+            - mountPath: /usr/local/vgpu/containers
+              name: host-vgpu-containers
 {{- if .Values.koordlet.runtimeClassName }}
       runtimeClassName: {{ .Values.koordlet.runtimeClassName }}
 {{- end }}
@@ -183,3 +189,11 @@ spec:
             sizeLimit: 150Mi
 {{- end }}
           name: metric-db-path
+        - hostPath:
+            path: /var/run/koordlet/xpu-device-infos/
+            type: DirectoryOrCreate
+          name: xpu-device-infos
+        - hostPath:
+            path: /usr/local/vgpu/containers
+            type: DirectoryOrCreate
+          name: host-vgpu-containers

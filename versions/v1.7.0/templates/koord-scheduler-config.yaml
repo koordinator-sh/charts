@@ -63,12 +63,23 @@ data:
             apiVersion: kubescheduler.config.k8s.io/v1
             kind: ElasticQuotaArgs
             quotaGroupNamespace: {{ .Values.installation.namespace }}
+        - name: Coscheduling
+          args:
+            apiVersion: kubescheduler.config.k8s.io/v1
+            kind: CoschedulingArgs
+{{- if .Values.scheduler.enableJobPreemption }}
+            enablePreemption: true
+{{- end }}
+            awareNetworkTopology: true
         plugins:
+          preEnqueue:
+            enabled:
+              - name: Coscheduling
           queueSort:
             disabled:
               - name: "*"
             enabled:
-              - name: Coscheduling
+              - name: PrioritySort
           preFilter:
             enabled:
               - name: Coscheduling
@@ -89,7 +100,10 @@ data:
               - name: Reservation
               - name: Coscheduling
               - name: ElasticQuota
+{{- if .Values.scheduler.enableJobPreemption }}
+{{- else }}
               - name: DefaultPreemption
+{{- end }}
           preScore:
             enabled:
               - name: Reservation # The Reservation plugin must come first
