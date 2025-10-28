@@ -82,6 +82,7 @@ data:
               - name: PrioritySort
           preFilter:
             enabled:
+              - name: SchedulingHint
               - name: Coscheduling
               - name: Reservation
               - name: NodeNUMAResource
