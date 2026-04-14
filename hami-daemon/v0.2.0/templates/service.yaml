@@ -1,0 +1,16 @@
+{{- if .Values.daemon.vgpuMonitor.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "hami-daemon.fullname" . }}
+  labels:
+    koord-app: hami-daemon
+  {{- include "hami-daemon.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.daemon.type }}
+  selector:
+    koord-app: hami-daemon
+    {{- include "hami-daemon.selectorLabels" . | nindent 4 }}
+  ports:
+  {{- .Values.daemon.vgpuMonitor.ports | toYaml | nindent 2 }}
+{{- end }}

@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "hami-daemon.fullname" . }}
+  labels:
+  {{- include "hami-daemon.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      koord-app: hami-daemon
+    {{- include "hami-daemon.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        koord-app: hami-daemon
+      {{- include "hami-daemon.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.daemon.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.daemon.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: hami-core
+        image: {{ .Values.daemon.hamiCore.image.repository }}:{{ .Values.daemon.hamiCore.image.tag
+          | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.daemon.hamiCore.imagePullPolicy }}
+        command:
+        - /bin/sh
+        - -c
+{{- if .Values.daemon.vgpuMonitor.enabled }}
+        - cp -f /k8s-vgpu/lib/nvidia/libvgpu.so.{{ .Values.daemon.hamiCore.libvgpuSoVersion
+          | default .Chart.AppVersion }} /usr/local/vgpu/libvgpu.so && vGPUmonitor -v=4
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        - name: NVIDIA_VISIBLE_DEVICES
+          value: {{ quote .Values.daemon.vgpuMonitor.env.nvidiaVisibleDevices }}
+        - name: NVIDIA_MIG_MONITOR_DEVICES
+          value: {{ quote .Values.daemon.vgpuMonitor.env.nvidiaMigMonitorDevices }}
+        - name: HOOK_PATH
+          value: {{ quote .Values.daemon.vgpuMonitor.env.hookPath }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        securityContext: {{- toYaml .Values.daemon.hamiCore.containerSecurityContext |
+          nindent 10 }}
+{{- else }}
+        - cp -f /k8s-vgpu/lib/nvidia/libvgpu.so.{{ .Values.daemon.hamiCore.libvgpuSoVersion
+          | default .Chart.AppVersion }} /usr/local/vgpu/libvgpu.so && sleep 360000
+{{- end }}
+        resources: {{- toYaml .Values.daemon.hamiCore.resources | nindent 10 }}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /usr/local/vgpu
+          name: vgpu-hook
+        - mountPath: /tmp/vgpulock
+          name: vgpu-lock
+{{- if .Values.daemon.vgpuMonitor.enabled }}
+        - mountPath: /usr/local/vgpu/containers
+          name: ctrs
+        - mountPath: /run/docker
+          name: dockers
+        - mountPath: /run/containerd
+          name: containerds
+        - mountPath: /sysinfo
+          name: sysinfo
+        - mountPath: /hostvar
+          name: hostvar
+        - mountPath: /tmp
+          name: hosttmp
+      serviceAccountName: {{ include "hami-daemon.fullname" . }}-vgpu-monitor
+      hostPID: true 
+{{- end }}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      volumes:
+      - hostPath:
+          path: /usr/local/vgpu
+          type: DirectoryOrCreate
+        name: vgpu-hook
+      - hostPath:
+          path: /tmp/vgpulock
+          type: DirectoryOrCreate
+        name: vgpu-lock
+{{- if .Values.daemon.vgpuMonitor.enabled }}
+      - hostPath:
+          path: /usr/local/vgpu/containers
+          type: ""
+        name: ctrs
+      - hostPath:
+          path: /tmp
+          type: ""
+        name: hosttmp
+      - hostPath:
+          path: /run/docker
+          type: ""
+        name: dockers
+      - hostPath:
+          path: /run/containerd
+          type: ""
+        name: containerds
+      - hostPath:
+          path: /sys
+          type: ""
+        name: sysinfo
+      - hostPath:
+          path: /var
+          type: ""
+        name: hostvar
+{{- end }}
