@@ -23,6 +23,17 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      initContainers:
+      - name: init-vgpu-lock-permissions
+        image: busybox:latest  # Lightweight and widely available
+        command: ['sh', '-c', 'mkdir -p /tmp/vgpulock && chmod 0777 /tmp/vgpulock']
+        volumeMounts:
+        - name: vgpu-lock
+          mountPath: /tmp/vgpulock
+        # Explicitly declare root permissions (to comply with PSP/security policies)
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
       containers:
       - name: hami-core
         image: {{ .Values.daemon.hamiCore.image.repository }}:{{ .Values.daemon.hamiCore.image.tag
