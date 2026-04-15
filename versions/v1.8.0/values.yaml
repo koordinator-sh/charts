@@ -35,7 +35,7 @@ imagePullSecrets: {}
 koordlet:
   image:
     repository: koordinator-sh/koordlet
-    tag: "v1.7.0"
+    tag: "v1.8.0"
   resources:
     limits:
       cpu: 200m
@@ -72,7 +72,7 @@ manager:
   replicas: 2
   image:
     repository: koordinator-sh/koord-manager
-    tag: "v1.7.0"
+    tag: "v1.8.0"
   webhook:
     port: 9876
   metrics:
@@ -119,7 +119,7 @@ scheduler:
   replicas: 2
   image:
     repository: koordinator-sh/koord-scheduler
-    tag: "v1.7.0"
+    tag: "v1.8.0"
   port: 10251
 
   # feature-gates for k8s > 1.22
@@ -155,7 +155,7 @@ descheduler:
   replicas: 2
   image:
     repository: koordinator-sh/koord-descheduler
-    tag: "v1.7.0"
+    tag: "v1.8.0"
   port: 10251
 
   featureGates: ""
@@ -179,7 +179,7 @@ descheduler:
 deviceDaemon:
   image:
     repository: koordinator-sh/koord-device-daemon
-    tag: "v1.7.0"
+    tag: "v1.8.0"
   resources:
     limits:
       cpu: 200m

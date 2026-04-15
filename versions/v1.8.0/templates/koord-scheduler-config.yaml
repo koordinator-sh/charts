@@ -108,6 +108,7 @@ data:
           preScore:
             enabled:
               - name: Reservation # The Reservation plugin must come first
+              - name: Coscheduling
           score:
             enabled:
               - name: LoadAwareScheduling
@@ -118,6 +119,8 @@ data:
                 weight: 1
               - name: Reservation
                 weight: 5000
+              - name: Coscheduling
+                weight: 1
           reserve:
             enabled:
               - name: Reservation # The Reservation plugin must come first
@@ -134,6 +137,7 @@ data:
               - name: NodeNUMAResource
               - name: DeviceShare
               - name: Reservation
+              - name: Coscheduling
               - name: DefaultPreBind
           bind:
             disabled:

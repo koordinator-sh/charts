@@ -269,6 +269,4 @@ spec:
             - zones
           type: object
       served: true
-      storage: true
-
-{{- end }}
+      storage: true{{- end }}
