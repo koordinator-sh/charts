@@ -1,4 +1,4 @@
-# Koordinator v1.7.0
+# Koordinator v1.8.0
 
 ## Configuration
 

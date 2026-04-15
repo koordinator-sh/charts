@@ -4,7 +4,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.20.1
   name: scheduleexplanations.scheduling.koordinator.sh
 spec:
   group: scheduling.koordinator.sh
@@ -40,55 +40,21 @@ spec:
             type: object
           spec:
             properties:
-              questionObjectReference:
+              questionObjectKey:
                 description: |-
-                  QuestionObjectReference is the object that needs to be questioned. Currently, Reservation and Pod is supported.
-                  To query the PodGroup or GangGroup, you can simply pass any of its member Pod here
-                properties:
-                  apiVersion:
-                    description: API version of the referent.
-                    type: string
-                  fieldPath:
-                    description: |-
-                      If referring to a piece of an object instead of an entire object, this string
-                      should contain a valid JSON/Go field access statement, such as desiredState.manifest.containers[2].
-                      For example, if the object reference is to a container within a pod, this would take on a value like:
-                      "spec.containers{name}" (where "name" refers to the name of the container that triggered
-                      the event) or if no container name is specified "spec.containers[2]" (container with
-                      index 2 in this pod). This syntax is chosen only to have some well-defined way of
-                      referencing a part of an object.
-                      TODO: this design is not final and this field is subject to change in the future.
-                    type: string
-                  kind:
-                    description: |-
-                      Kind of the referent.
-                      More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-                    type: string
-                  name:
-                    description: |-
-                      Name of the referent.
-                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                    type: string
-                  namespace:
-                    description: |-
-                      Namespace of the referent.
-                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
-                    type: string
-                  resourceVersion:
-                    description: |-
-                      Specific resourceVersion to which this reference is made, if any.
-                      More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#concurrency-control-and-consistency
-                    type: string
-                  uid:
-                    description: |-
-                      UID of the referent.
-                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#uids
-                    type: string
-                type: object
-                x-kubernetes-map-type: atomic
+                  QuestionObjectKey is the key of the QuestionObject.
+                  For pod, it is namespace/name; for job, it is namespace/jobName; for pod with gangGroupAnnotation, it is gangGroupIDs.
+                type: string
               questionObjectTemplate:
                 description: QuestionObjectTemplate defines the questioned pod template.
+                  Now it is unsupported
                 x-kubernetes-preserve-unknown-fields: true
+              ttl:
+                default: 24h
+                description: |-
+                  Time-to-Live period for the explanation CR.
+                  Defaults to 24h. Set 0 to disable expiration.
+                type: string
             type: object
           status:
             properties:
@@ -150,21 +116,12 @@ spec:
                             be scheduled, provide the reason for each node.
                           items:
                             properties:
+                              failedNodes:
+                                items:
+                                  type: string
+                                type: array
                               failedPlugin:
                                 type: string
-                              nodeName:
-                                type: string
-                              nominatedPods:
-                                items:
-                                  properties:
-                                    name:
-                                      type: string
-                                    namespace:
-                                      type: string
-                                    uid:
-                                      type: string
-                                  type: object
-                                type: array
                               preemptMightHelp:
                                 type: boolean
                               reason:
@@ -179,6 +136,11 @@ spec:
                     schedulable:
                       description: Schedulable indicates whether the QuestionObject
                         can be scheduled.
+                      type: boolean
+                    schedulableAfterPreemption:
+                      description: |-
+                        SchedulableAfterPreemption indicates whether the QuestionObject can be scheduled
+                        after preempting possible victims. Only meaningful when Schedulable is false.
                       type: boolean
                     scheduleExplanation:
                       properties:
@@ -207,21 +169,12 @@ spec:
                             be scheduled, provide the reason for each node.
                           items:
                             properties:
+                              failedNodes:
+                                items:
+                                  type: string
+                                type: array
                               failedPlugin:
                                 type: string
-                              nodeName:
-                                type: string
-                              nominatedPods:
-                                items:
-                                  properties:
-                                    name:
-                                      type: string
-                                    namespace:
-                                      type: string
-                                    uid:
-                                      type: string
-                                  type: object
-                                type: array
                               preemptMightHelp:
                                 type: boolean
                               reason:
@@ -242,9 +195,20 @@ spec:
                 description: FailedMessage indicates the reason for the QuestionObject
                   can't be scheduled.
                 type: string
+              lastUpdateTime:
+                description: |-
+                  LastUpdateTime records when the status was last written. It is updated whenever
+                  the status content changes, or at least once per minute as a heartbeat.
+                format: date-time
+                type: string
               schedulable:
                 description: Schedulable indicates whether the QuestionObject can
                   be scheduled.
+                type: boolean
+              schedulableAfterPreemption:
+                description: |-
+                  SchedulableAfterPreemption indicates whether the QuestionObject can be scheduled
+                  after preempting possible victims. Only meaningful when Schedulable is false.
                 type: boolean
             type: object
         type: object
@@ -252,6 +216,4 @@ spec:
     storage: true
     subresources:
       status: {}
-
-
 {{- end }}

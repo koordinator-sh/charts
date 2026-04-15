@@ -4,7 +4,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.20.1
   name: nodeslos.slo.koordinator.sh
 spec:
   group: slo.koordinator.sh
@@ -291,8 +291,6 @@ spec:
                             format: int64
                             type: integer
                           priorityEnable:
-                            description: 'TODO: enhance the usages of oom priority
-                              and oom kill group'
                             format: int64
                             type: integer
                           throttlingPercent:
@@ -599,8 +597,6 @@ spec:
                             format: int64
                             type: integer
                           priorityEnable:
-                            description: 'TODO: enhance the usages of oom priority
-                              and oom kill group'
                             format: int64
                             type: integer
                           throttlingPercent:
@@ -907,8 +903,6 @@ spec:
                             format: int64
                             type: integer
                           priorityEnable:
-                            description: 'TODO: enhance the usages of oom priority
-                              and oom kill group'
                             format: int64
                             type: integer
                           throttlingPercent:
@@ -1215,8 +1209,6 @@ spec:
                             format: int64
                             type: integer
                           priorityEnable:
-                            description: 'TODO: enhance the usages of oom priority
-                              and oom kill group'
                             format: int64
                             type: integer
                           throttlingPercent:
@@ -1533,8 +1525,6 @@ spec:
                             format: int64
                             type: integer
                           priorityEnable:
-                            description: 'TODO: enhance the usages of oom priority
-                              and oom kill group'
                             format: int64
                             type: integer
                           throttlingPercent:
@@ -1662,10 +1652,28 @@ spec:
                     type: object
                 type: object
               resourceUsedThresholdWithBE:
-                description: |-
-                  BE pods will be limited if node resource usage overload
-                  TODO: ResourceUsedThresholdWithBE need to rename
+                description: BE pods will be limited if node resource usage overload
                 properties:
+                  allocatableEvictPriorityThreshold:
+                    description: AllocatableEvictPriorityThreshold defines the highest
+                      priority for the xxxAllocatableEvict feature. must less than
+                      koord-prod
+                    format: int32
+                    type: integer
+                  cpuAllocatableEvictLowerPercent:
+                    description: |-
+                      lower: cpu release util requestPercent under CPUAllocatableEvictLowerPercent, default = 100
+                      evict until cpu.requestPercent <= CPUAllocatableEvictLowerPercent, then stop .
+                    format: int64
+                    minimum: 0
+                    type: integer
+                  cpuAllocatableEvictThresholdPercent:
+                    description: |-
+                      upper: cpu ledger evict threshold percentage (0,), default = 110
+                      if cpu.requestPercent > CPUAllocatableEvictThresholdPercent, then start to evict.
+                    format: int64
+                    minimum: 0
+                    type: integer
                   cpuEvictBESatisfactionLowerPercent:
                     description: |-
                       be.satisfactionRate = be.CPURealLimit/be.CPURequest; be.cpuUsage = be.CPUUsed/be.CPURealLimit
@@ -1686,7 +1694,7 @@ spec:
                     type: integer
                   cpuEvictLowerPercent:
                     description: 'lower: CPU release util usage under CPUEvictLowerPercent,
-                      default = CPUEvictLowerPercent - 2'
+                      default = CPUEvictThresholdPercent - 2'
                     format: int64
                     maximum: 100
                     minimum: 0
@@ -1733,6 +1741,20 @@ spec:
                     description: EvictEnabledPriorityThreshold defines the highest
                       priority for the xxxEvict feature.
                     format: int32
+                    type: integer
+                  memoryAllocatableEvictLowerPercent:
+                    description: |-
+                      lower: memory release util requestPercent under MemoryAllocatableEvictLowerPercent, default = 100
+                      evict until memory.requestPercent <= MemoryAllocatableEvictLowerPercent, then stop .
+                    format: int64
+                    minimum: 0
+                    type: integer
+                  memoryAllocatableEvictThresholdPercent:
+                    description: |-
+                      upper: memory ledger evict threshold percentage (0,), default = 110
+                      if memory.requestPercent > MemoryAllocatableEvictThresholdPercent, then start to evict.
+                    format: int64
+                    minimum: 0
                     type: integer
                   memoryEvictLowerPercent:
                     description: 'lower: memory release util usage under MemoryEvictLowerPercent,
@@ -1811,5 +1833,4 @@ spec:
     storage: true
     subresources:
       status: {}
-
 {{- end }}
