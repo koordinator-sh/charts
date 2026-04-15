@@ -24,7 +24,7 @@ crds:
 installation:
   namespace: koordinator-system
   roleListGroups:
-    - '*'
+  - '*'
 
 featureGates: ""
 
@@ -62,7 +62,6 @@ koordlet:
   metrics:
     port: 9316
   enableServiceMonitor: false
-
 
 manager:
   # settings for log print
@@ -111,7 +110,6 @@ webhookConfiguration:
 serviceAccount:
   annotations: {}
 
-
 scheduler:
   # settings for log print
   log:
@@ -146,6 +144,7 @@ scheduler:
   nodeAffinity: {}
   nodeSelector: {}
   tolerations: []
+  monitorEnabled: false
 
 descheduler:
   # settings for log print
@@ -175,6 +174,7 @@ descheduler:
   nodeAffinity: {}
   nodeSelector: {}
   tolerations: []
+  monitorEnabled: false
 
 deviceDaemon:
   image:

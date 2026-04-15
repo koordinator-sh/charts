@@ -44,6 +44,7 @@ The following table lists the configurable parameters of the chart and their def
 | `scheduler.nodeAffinity`                           | Node affinity policy for koord-scheduler pod                     | `{}`                            |
 | `scheduler.nodeSelector`                           | Node labels for koord-scheduler pod                              | `{}`                            |
 | `scheduler.tolerations`                            | Tolerations for koord-scheduler pod                              | `[]`                            |
+| `scheduler.monitorEnabled`                         | Whether to enable PodMonitor for koord-scheduler                 | `false`                         |
 | `scheduler.hostNetwork`                            | Whether koord-scheduler pod should run with hostnetwork          | `false`                         |
 | `koordlet.log.level`                               | Log level that koordlet printed                                  | `4`                             |
 | `koordlet.image.repository`                        | Repository for koordlet image                                    | `koordinatorsh/koordlet`        |
@@ -71,6 +72,7 @@ The following table lists the configurable parameters of the chart and their def
 | `descheduler.nodeAffinity`                         | Node affinity policy for koord-descheduler pod                   | `{}`                            |
 | `descheduler.nodeSelector`                         | Node labels for koord-descheduler pod                            | `{}`                            |
 | `descheduler.tolerations`                          | Tolerations for koord-descheduler pod                            | `[]`                            |
+| `descheduler.monitorEnabled`                       | Whether to enable PodMonitor for koord-descheduler               | `false`                         |
 | `descheduler.hostNetwork`                          | Whether koord-descheduler pod should run with hostnetwork        | `false`                         |
 | `deviceDaemon.log.level`                           | Log level that koord-device-daemon printed                       | `4`                             |
 | `deviceDaemon.image.repository`                    | Repository for koord-device-daemon image                         | `koordinatorsh/koord-device-daemon` |
