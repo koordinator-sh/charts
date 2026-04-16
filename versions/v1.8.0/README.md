@@ -18,8 +18,8 @@ The following table lists the configurable parameters of the chart and their def
 | `imageRepositoryHost`                              | Image repository host                                            | `ghcr.io`                       |
 | `manager.log.level`                                | Log level that koord-manager printed                             | `4`                             |
 | `manager.replicas`                                 | Replicas of koord-manager deployment                             | `2`                             |
-| `manager.image.repository`                         | Repository for koord-manager image                               | `koordinatorsh/koord-manager`   |
-| `manager.image.tag`                                | Tag for koord-manager image                                      | `v1.7.0`                        |
+| `manager.image.repository`                         | Repository for koord-manager image                               | `koordinator-sh/koord-manager`  |
+| `manager.image.tag`                                | Tag for koord-manager image                                      | `v1.8.0`                        |
 | `manager.resources.limits.cpu`                     | CPU resource limit of koord-manager container                    | `1000m`                         |
 | `manager.resources.limits.memory`                  | Memory resource limit of koord-manager container                 | `1Gi`                           |
 | `manager.resources.requests.cpu`                   | CPU resource request of koord-manager container                  | `500m`                          |
@@ -34,8 +34,8 @@ The following table lists the configurable parameters of the chart and their def
 | `manager.hostNetwork`                              | Whether koord-manager pod should run with hostnetwork            | `false`                         |
 | `scheduler.log.level`                              | Log level that koord-scheduler printed                           | `4`                             |
 | `scheduler.replicas`                               | Replicas of koord-scheduler deployment                           | `2`                             |
-| `scheduler.image.repository`                       | Repository for koord-scheduler image                             | `koordinatorsh/koord-scheduler` |
-| `scheduler.image.tag`                              | Tag for koord-scheduler image                                    | `v1.7.0`                        |
+| `scheduler.image.repository`                       | Repository for koord-scheduler image                             | `koordinator-sh/koord-scheduler` |
+| `scheduler.image.tag`                              | Tag for koord-scheduler image                                    | `v1.8.0`                        |
 | `scheduler.resources.limits.cpu`                   | CPU resource limit of koord-scheduler container                  | `1000m`                         |
 | `scheduler.resources.limits.memory`                | Memory resource limit of koord-scheduler container               | `1Gi`                           |
 | `scheduler.resources.requests.cpu`                 | CPU resource request of koord-scheduler container                | `500m`                          |
@@ -47,8 +47,8 @@ The following table lists the configurable parameters of the chart and their def
 | `scheduler.monitorEnabled`                         | Whether to enable PodMonitor for koord-scheduler                 | `false`                         |
 | `scheduler.hostNetwork`                            | Whether koord-scheduler pod should run with hostnetwork          | `false`                         |
 | `koordlet.log.level`                               | Log level that koordlet printed                                  | `4`                             |
-| `koordlet.image.repository`                        | Repository for koordlet image                                    | `koordinatorsh/koordlet`        |
-| `koordlet.image.tag`                               | Tag for koordlet image                                           | `v1.7.0`                        |
+| `koordlet.image.repository`                        | Repository for koordlet image                                    | `koordinator-sh/koordlet`       |
+| `koordlet.image.tag`                               | Tag for koordlet image                                           | `v1.8.0`                        |
 | `koordlet.resources.limits.cpu`                    | CPU resource limit of koordlet container                         | `200m`                          |
 | `koordlet.resources.limits.memory`                 | Memory resource limit of koordlet container                      | `256Mi`                         |
 | `koordlet.resources.requests.cpu`                  | CPU resource request of koordlet container                       | `0`                             |
@@ -61,8 +61,8 @@ The following table lists the configurable parameters of the chart and their def
 | `scheduler.enableJobPreemption`                    | Whether to enable job preemption in koord-scheduler              | `true`                          |
 | `descheduler.log.level`                            | Log level that koord-descheduler printed                         | `4`                             |
 | `descheduler.replicas`                             | Replicas of koord-descheduler deployment                         | `2`                             |
-| `descheduler.image.repository`                     | Repository for koord-descheduler image                           | `koordinatorsh/koord-descheduler` |
-| `descheduler.image.tag`                            | Tag for koord-descheduler image                                  | `v1.7.0`                        |
+| `descheduler.image.repository`                     | Repository for koord-descheduler image                           | `koordinator-sh/koord-descheduler` |
+| `descheduler.image.tag`                            | Tag for koord-descheduler image                                  | `v1.8.0`                        |
 | `descheduler.resources.limits.cpu`                 | CPU resource limit of koord-descheduler container                | `1000m`                         |
 | `descheduler.resources.limits.memory`              | Memory resource limit of koord-descheduler container             | `1Gi`                           |
 | `descheduler.resources.requests.cpu`               | CPU resource request of koord-descheduler container              | `500m`                          |
@@ -75,8 +75,8 @@ The following table lists the configurable parameters of the chart and their def
 | `descheduler.monitorEnabled`                       | Whether to enable PodMonitor for koord-descheduler               | `false`                         |
 | `descheduler.hostNetwork`                          | Whether koord-descheduler pod should run with hostnetwork        | `false`                         |
 | `deviceDaemon.log.level`                           | Log level that koord-device-daemon printed                       | `4`                             |
-| `deviceDaemon.image.repository`                    | Repository for koord-device-daemon image                         | `koordinatorsh/koord-device-daemon` |
-| `deviceDaemon.image.tag`                           | Tag for koord-device-daemon image                                | `v1.7.0`                        |
+| `deviceDaemon.image.repository`                    | Repository for koord-device-daemon image                         | `koordinator-sh/koord-device-daemon` |
+| `deviceDaemon.image.tag`                           | Tag for koord-device-daemon image                                | `v1.8.0`                        |
 | `deviceDaemon.resources.limits.cpu`                | CPU resource limit of koord-device-daemon container              | `200m`                          |
 | `deviceDaemon.resources.limits.memory`             | Memory resource limit of koord-device-daemon container           | `256Mi`                         |
 | `deviceDaemon.resources.requests.cpu`              | CPU resource request of koord-device-daemon container            | `0`                             |
