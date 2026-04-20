@@ -171,3 +171,27 @@ descheduler:
   nodeAffinity: {}
   nodeSelector: {}
   tolerations: []
+koordYarnCopilotAgent:
+  enabled: true
+  log:
+    # log level for yarn-copilot-agent
+    level: "6"
+  image:
+    repository: koordinator-sh/yarn-copilot
+    tag: "v0.1.0"
+  resyncPeriod: "0"
+  # resources of yarn-copilot-agent container
+  serverEndpoint: /var/run/yarn-copilot/yarn-copilot.sock
+  cgroupRootDir: /host-cgroup/
+  yarnContainerCgroupPath: /kubepods.slice/kubepods-besteffort.slice/hadoop-yarn
+  nodeManagerEndpoint: 127.0.0.1:8092
+  syncMemoryCgroup: true
+  syncCgroupPeriod: "10s"
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 256Mi
+  hostNetwork: true
