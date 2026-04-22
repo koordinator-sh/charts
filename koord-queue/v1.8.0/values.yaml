@@ -1,0 +1,71 @@
+# Default values for koord-queue.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  # the prefix of all image
+  imagePrefix: ghcr.io
+
+tolerations: []
+isNeedNotebookExtension: false
+oversellrate: 1
+qps: 50
+burst: 50
+jobRunningTimeout: "0"
+jobBackoffTime: "0"
+
+installation:
+  namespace: koord-queue
+  roleListGroups:
+    - '*'
+
+controller:
+  image:
+    repository: koordinatorsh/koord-queue
+    tag: latest
+  # resources of koord-queue-controller container
+  queueGroupPlugin: elasticquotav2
+  enableBlockingMode: false
+  enableStrictPriority: false
+  enableVisibilityServer: false
+  enableResourceCheckWithScheduler: false
+  defaultPreemptible: true
+  resources:
+    limits:
+      cpu: 200m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+extension:
+  jobextensions:
+    repository: koordinatorsh/jobextensions
+    tag: latest
+    resources:
+      limits:
+        memory: 2Gi
+  ray:
+    enable: false
+  tf:
+    enable: false
+  pytorch:
+    enable: false
+  batchjob:
+    enable: true
+  argo:
+    enable: false
+  spark:
+    enable: false
+  mpi:
+    enable: false
+
+pluginConfigs: 
+  apiVersion: scheduling.k8s.io/v1
+  kind: KoordQueueConfiguration
+  plugins: 
+  - name: Priority
+  - name: ElasticQuotaV2
+  pluginConfigs: {}
+#   ElasticQuota: 
+#     checkHungryQuota: false

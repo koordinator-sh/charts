@@ -1,0 +1,147 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: koord-queue
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: koord-queue-controller
+  namespace: koord-queue
+  labels:
+    control-plane: koord-queue-controller
+spec:
+  selector:
+    matchLabels:
+      control-plane: koord-queue-controller
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        control-plane: koord-queue-controller
+    spec:
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: koord-queue-plugin-config
+        name: koord-queue-plugin-config
+      serviceAccountName: koord-queue
+      containers:
+        - image: "{{ include "koord-queue.imagePrefix" . }}/{{ .Values.controller.image.repository }}:{{ .Values.controller.image.tag }}"
+          imagePullPolicy: Always
+          name: controller
+          volumeMounts:
+          - mountPath: /etc/kubernetes/ack-config
+            name: koord-queue-plugin-config
+          command:
+          - koord-queue
+          - --v=4
+          - --oversellrate={{ .Values.oversellrate }}
+          - --qps={{ .Values.qps }}
+          - --burst={{ .Values.burst }}
+          - --config=/etc/kubernetes/ack-config/plugin.yaml
+          - --enableVisibilityServer={{ .Values.controller.enableVisibilityServer }}
+          - --strictDequeueMode={{ .Values.controller.enableResourceCheckWithScheduler }}
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            {{- if .Values.controller.enableBlockingMode }}
+            - name: StrictPriority
+              value: "true"
+            {{- end}}
+            {{- if .Values.controller.enableStrictPriority }}
+            - name: StrictConsistency
+              value: "true"
+            {{- end}}
+            {{- if .Values.controller.queueGroupPlugin }}
+            - name: QueueGroupPlugin
+              value: {{ .Values.controller.queueGroupPlugin }}
+            {{- end}}
+          resources:
+            {{- toYaml .Values.controller.resources | nindent 12 }}
+      terminationGracePeriodSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: job-extensions
+  namespace: koord-queue
+  labels:
+    control-plane: controller-manager
+    app.kubernetes.io/name: deployment
+    app.kubernetes.io/instance: controller-manager
+    app.kubernetes.io/component: manager
+    app.kubernetes.io/created-by: job-extensions
+    app.kubernetes.io/part-of: job-extensions
+    app.kubernetes.io/managed-by: kustomize
+spec:
+  selector:
+    matchLabels:
+      control-plane: job-extensions
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+      labels:
+        control-plane: job-extensions
+    spec:
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      containers:
+        - command:
+            - /usr/bin/koord-queue-controllers
+          args:
+            - --leader-elect
+            {{- $jobType := "" }}
+            {{- if .Values.extension.batchjob.enable }}
+            {{- $jobType = print $jobType ",job"}}
+            {{- end }}
+            {{- if .Values.extension.spark.enable }}
+            {{- $jobType = print $jobType ",sparkapp"}}
+            {{- end }}
+            {{- if .Values.extension.ray.enable }}
+            {{- $jobType = print $jobType ",rayjob"}}
+            {{- end }}
+            {{- if .Values.extension.tf.enable }}
+            {{- $jobType = print $jobType ",tfjob"}}
+            {{- end }}
+            {{- if .Values.extension.pytorch.enable }}
+            {{- $jobType = print $jobType ",pytorchjob"}}
+            {{- end }}
+            {{- if .Values.extension.argo.enable }}
+            {{- $jobType = print $jobType ",workflow"}}
+            {{- end }}
+            - --enabled-extensions={{- $jobType | trimPrefix "," }}
+          image: "{{ include "koord-queue.imagePrefix" . }}/{{.Values.extension.jobextensions.repository}}:{{ .Values.extension.jobextensions.tag }}"
+          name: manager
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+          {{- toYaml .Values.extension.jobextensions.resources | nindent 12 }}
+      serviceAccount: koord-queue
+      serviceAccountName: koord-queue
+      terminationGracePeriodSeconds: 10

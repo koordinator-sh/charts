@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: koord-queue-plugin-config
+  namespace: koord-queue
+data:
+  plugin.yaml: |
+{{ toYaml .Values.pluginConfigs | indent 4}}
