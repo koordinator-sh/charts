@@ -15,7 +15,7 @@ spec:
       protocol: TCP
       targetPort: 8082
   selector:
-    control-plane: koord-queue-controller
+    control-plane: koord-queue
     koord-queue-leader: "true"
   sessionAffinity: None
   type: ClusterIP

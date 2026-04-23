@@ -4,7 +4,7 @@
 
 global:
   # the prefix of all image
-  imagePrefix: ghcr.io
+  imagePrefix: registry.cn-beijing.aliyuncs.com
 
 tolerations: []
 isNeedNotebookExtension: false
@@ -17,11 +17,11 @@ jobBackoffTime: "0"
 installation:
   namespace: koord-queue
   roleListGroups:
-    - '*'
+  - '*'
 
 controller:
   image:
-    repository: koordinatorsh/koord-queue
+    repository: koordinator-sh/koord-queue
     tag: latest
   # resources of koord-queue-controller container
   queueGroupPlugin: elasticquotav2
@@ -39,8 +39,8 @@ controller:
       memory: 256Mi
 
 extension:
-  jobextensions:
-    repository: koordinatorsh/jobextensions
+  koord-queue-controllers:
+    repository: koordinator-sh/koord-queue-controllers
     tag: latest
     resources:
       limits:
@@ -60,12 +60,13 @@ extension:
   mpi:
     enable: false
 
-pluginConfigs: 
+pluginConfigs:
   apiVersion: scheduling.k8s.io/v1
   kind: KoordQueueConfiguration
-  plugins: 
+  plugins:
   - name: Priority
   - name: ElasticQuotaV2
   pluginConfigs: {}
+
 #   ElasticQuota: 
 #     checkHungryQuota: false
