@@ -7,12 +7,10 @@ global:
   imagePrefix: registry.cn-beijing.aliyuncs.com
 
 tolerations: []
-isNeedNotebookExtension: false
 oversellrate: 1
 qps: 50
 burst: 50
-jobRunningTimeout: "0"
-jobBackoffTime: "0"
+# TODO: support job recycling
 
 installation:
   namespace: koord-queue
@@ -22,14 +20,9 @@ installation:
 controller:
   image:
     repository: koordinator-sh/koord-queue
-    tag: latest
+    tag: v1.8.0
   # resources of koord-queue-controller container
-  queueGroupPlugin: elasticquotav2
-  enableBlockingMode: false
-  enableStrictPriority: false
   enableVisibilityServer: false
-  enableResourceCheckWithScheduler: false
-  defaultPreemptible: true
   resources:
     limits:
       cpu: 200m
@@ -41,7 +34,7 @@ controller:
 extension:
   koord-queue-controllers:
     repository: koordinator-sh/koord-queue-controllers
-    tag: latest
+    tag: v1.8.0
     resources:
       limits:
         memory: 2Gi
@@ -67,6 +60,3 @@ pluginConfigs:
   - name: Priority
   - name: ElasticQuotaV2
   pluginConfigs: {}
-
-#   ElasticQuota: 
-#     checkHungryQuota: false

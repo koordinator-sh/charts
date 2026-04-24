@@ -1,9 +1,4 @@
 ---
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: koord-queue
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -46,7 +41,6 @@ spec:
           - --burst={{ .Values.burst }}
           - --config=/etc/kubernetes/ack-config/plugin.yaml
           - --enableVisibilityServer={{ .Values.controller.enableVisibilityServer }}
-          - --strictDequeueMode={{ .Values.controller.enableResourceCheckWithScheduler }}
           env:
             - name: POD_NAMESPACE
               valueFrom:
@@ -56,18 +50,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            {{- if .Values.controller.enableBlockingMode }}
-            - name: StrictPriority
-              value: "true"
-            {{- end}}
-            {{- if .Values.controller.enableStrictPriority }}
-            - name: StrictConsistency
-              value: "true"
-            {{- end}}
-            {{- if .Values.controller.queueGroupPlugin }}
-            - name: QueueGroupPlugin
-              value: {{ .Values.controller.queueGroupPlugin }}
-            {{- end}}
           resources:
             {{- toYaml .Values.controller.resources | nindent 12 }}
       terminationGracePeriodSeconds: 10
