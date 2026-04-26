@@ -1,0 +1,40 @@
+{{if .Values.controller.enableVisibilityServer }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: koord-queue-visibility-server
+  namespace: koord-queue
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: visibility
+      port: 443
+      protocol: TCP
+      targetPort: 8082
+  selector:
+    control-plane: koord-queue
+    koord-queue-leader: "true"
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/name: koord-queue
+    control-plane: controller-manager
+  name: v1alpha1.visibility.koord-queue.x-k8s.io
+spec:
+  group: visibility.koord-queue.x-k8s.io
+  groupPriorityMinimum: 100
+  insecureSkipTLSVerify: true
+  service:
+    name: koord-queue-visibility-server
+    namespace: koord-queue
+  version: v1alpha1
+  versionPriority: 100
+{{end}}

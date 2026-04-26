@@ -1,0 +1,228 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: koord-queue
+rules:
+  - apiGroups:
+    - ""
+    resources:
+    - configmaps
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - authorization.k8s.io
+    resources:
+    - subjectaccessreviews
+    verbs:
+    - create
+    - delete
+    - update
+    - patch
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - "flowcontrol.apiserver.k8s.io"
+    resources:
+    - flowschemas
+    - prioritylevelconfigurations
+    verbs:
+    - get
+    - list
+    - watch 
+  - apiGroups:
+    - "admissionregistration.k8s.io"
+    resources:
+    - mutatingwebhookconfigurations
+    - validatingadmissionpolicies
+    - validatingwebhookconfigurations
+    - validatingadmissionpolicybindings
+    verbs:
+    - get
+    - list
+    - watch 
+  {{- if .Values.extension.ray.enable }}
+  - apiGroups:
+      - ray.io
+    resources:
+      - rayjobs
+      - rayclusters
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ray.io
+    resources:
+      - rayjobs/status
+      - rayclusters/status
+    verbs:
+      - get
+  {{- end }}
+  {{- if .Values.extension.spark.enable }}
+  - apiGroups:
+      - sparkoperator.k8s.io
+    resources:
+      - sparkapplications
+      - sparkapplications/status
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+  {{- end }}
+  - apiGroups: ["scheduling.x-k8s.io"]
+    resources: ["queues", "queues/status", "queueunits", "queueunits/status"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["xgboostjob.kubeflow.org"]
+    resources: ["xgboostjobs/status", "xgboostjobs"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["kubeflow.org"]
+    resources: ["tfjobs", "mpijobs", "pytorchjobs", "tfjobs/status", "mpijobs/status", "pytorchjobs/status"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  {{- if .Values.isNeedNotebookExtension }}
+  - apiGroups: ["dsw.alibaba.com"]
+    resources: ["notebooks"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  {{- end }}
+  {{- if .Values.extension.batchjob.enable }}
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  {{- end }}
+  - apiGroups: [""]
+    resources: ["pods", "services", "pods/log"]
+    verbs: ["get", "list", "watch", "delete"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["patch"]
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["pods/status"]
+    verbs: ["get", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["namespaces", "resourcequotas"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["scheduling.sigs.k8s.io"]
+    resources: ["podgroups","elasticquotatrees","elasticquotas"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["scheduling.k8s.io"]
+    resources: ["priorityclasses"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get", "create", "update", "patch"]
+  {{- if .Values.extension.argo.enable }}
+  - apiGroups: ["argoproj.io"]
+    resources: ["clusterworkflowtemplates", "clusterworkflowtemplates/finalizers", "clusterworkflowtemplates/status", "workflows", "workflows/finalizers", "workflows/status", "workflowtemplates", "workflowtemplates/finalizers", "workflowtemplates/status"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  {{- end }}
+# ---
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: ClusterRole
+# metadata:
+#   name: ac-ctrl-cr
+# rules:
+  - apiGroups:
+    - scheduling.koordinator.sh
+    resources:
+    - reservations
+    verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+  - apiGroups:
+    - autoscaling.x-k8s.io
+    resources:
+    - provisioningrequests
+    verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+  - apiGroups:
+    - kueue.x-k8s.io
+    resources:
+    - admissionchecks
+    - provisioningrequestconfigs
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - kueue.x-k8s.io
+    resources:
+    - admissionchecks/status
+    verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+  - apiGroups:
+    - ""
+    resources:
+    - podtemplates
+    verbs:
+    - get
+    - list
+    - watch
+    - create
+    - update
+    - patch
+    - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: koord-queue-clusterrolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: koord-queue
+subjects:
+  - kind: ServiceAccount
+    name: koord-queue
+    namespace: koord-queue
+# ---
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: ClusterRoleBinding
+# metadata:
+#   name: ac-ctrl-crb
+# roleRef:
+#   apiGroup: rbac.authorization.k8s.io
+#   kind: ClusterRole
+#   name: koord-queue
+# subjects:
+#   - kind: ServiceAccount
+#     name: koord-queue
+#     namespace: koord-queue
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: koord-queue
+  namespace: koord-queue
+  

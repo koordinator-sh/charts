@@ -1,0 +1,62 @@
+# Default values for koord-queue.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  # the prefix of all image
+  imagePrefix: registry.cn-beijing.aliyuncs.com
+
+tolerations: []
+oversellrate: 1
+qps: 50
+burst: 50
+# TODO: support job recycling
+
+installation:
+  namespace: koord-queue
+  roleListGroups:
+  - '*'
+
+controller:
+  image:
+    repository: koordinator-sh/koord-queue
+    tag: v1.8.0
+  # resources of koord-queue-controller container
+  enableVisibilityServer: false
+  resources:
+    limits:
+      cpu: 200m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+
+extension:
+  koord-queue-controllers:
+    repository: koordinator-sh/koord-queue-controllers
+    tag: v1.8.0
+    resources:
+      limits:
+        memory: 2Gi
+  ray:
+    enable: false
+  tf:
+    enable: false
+  pytorch:
+    enable: false
+  batchjob:
+    enable: true
+  argo:
+    enable: false
+  spark:
+    enable: false
+  mpi:
+    enable: false
+
+pluginConfigs:
+  apiVersion: scheduling.k8s.io/v1
+  kind: KoordQueueConfiguration
+  plugins:
+  - name: Priority
+  - name: ElasticQuotaV2
+  pluginConfigs: {}
