@@ -32,6 +32,27 @@ entries:
     urls:
     - https://github.com/koordinator-sh/charts/releases/download/hami-daemon-0.1.0/hami-daemon-0.1.0.tgz
     version: 0.1.0
+  koord-queue:
+  - annotations:
+      artifacthub.io/changes: |
+        - "[Added]: Add koord-queue helm chart"
+    apiVersion: v2
+    appVersion: 1.8.0
+    created: "2026-04-27T03:25:38.344761479Z"
+    description: A Helm chart to deploy koord-queue for Kubernetes
+    digest: b06d2564cc34213e123d4f1d0af57ffc053ea47087755041ca648af3d159808a
+    home: https://github.com/koordinator-sh/koord-queue
+    keywords:
+    - category:data
+    - koord-queue
+    - namespace:koord-queue
+    - releaseName:koord-queue
+    - console-visibility:false
+    name: koord-queue
+    type: application
+    urls:
+    - https://github.com/koordinator-sh/charts/releases/download/koord-queue-1.8.0/koord-queue-1.8.0.tgz
+    version: 1.8.0
   koordinator:
   - apiVersion: v2
     appVersion: 1.8.0
@@ -433,4 +454,4 @@ entries:
     urls:
     - https://github.com/koordinator-sh/charts/releases/download/koordinator-yarn-operator-0.1.0/koordinator-yarn-operator-0.1.0.tgz
     version: 0.1.0
-generated: "2026-04-16T08:27:29.711161252Z"
+generated: "2026-04-27T03:25:38.34490592Z"
