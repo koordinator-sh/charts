@@ -5,6 +5,10 @@ on:
     branches:
       - main
       - rewrite-build
+
+permissions:
+  contents: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -32,4 +36,4 @@ jobs:
           charts_dir: charts
           config: "./.github/configs/cr.yaml"
         env:
-          CR_TOKEN: "${{ secrets.GH_TOKEN }}"
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
