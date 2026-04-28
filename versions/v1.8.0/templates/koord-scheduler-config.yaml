@@ -71,6 +71,16 @@ data:
             enablePreemption: true
 {{- end }}
             awareNetworkTopology: true
+{{- if .Values.scheduler.deviceShare }}
+        - name: DeviceShare
+          args:
+            apiVersion: kubescheduler.config.k8s.io/v1
+            kind: DeviceShareArgs
+{{- with .Values.scheduler.deviceShare.gpuShareUnsupportedModels }}
+            gpuShareUnsupportedModels:
+{{ toYaml . | indent 14 }}
+{{- end }}
+{{- end }}
         plugins:
           preEnqueue:
             enabled:

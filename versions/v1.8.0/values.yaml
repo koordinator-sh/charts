@@ -130,6 +130,14 @@ scheduler:
   compatibleBelow122FeatureGates: "DisableCSIStorageCapacityInformer=true,CompatiblePodDisruptionBudget=true"
   enableJobPreemption: true
 
+  # deviceShare plugin args. See koordinator PR #2789.
+  # gpuShareUnsupportedModels lists GPU vendor-model pairs that do not support GPU sharing (e.g. vNPU).
+  # Pods requesting gpu.shared resources will be filtered out from nodes matching any of these models.
+  deviceShare:
+    gpuShareUnsupportedModels:
+    - vendor: "huawei"
+      model: "Ascend-310P3-300I-DUO"
+
   # resources of koord-scheduler container
   resources:
     limits:

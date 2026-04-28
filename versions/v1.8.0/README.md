@@ -59,6 +59,7 @@ The following table lists the configurable parameters of the chart and their def
 | `koordlet.metrics.port`                            | Port of metrics served                                           | `9316`                          |
 | `scheduler.featureGates`                           | Feature gates for koord-scheduler                                | ` `                             |
 | `scheduler.enableJobPreemption`                    | Whether to enable job preemption in koord-scheduler              | `true`                          |
+| `scheduler.deviceShare.gpuShareUnsupportedModels`  | GPU vendor-model pairs that do not support GPU sharing (e.g. vNPU). Pods requesting `gpu.shared` will be filtered out from nodes matching any of these models. | `[{vendor: huawei, model: Ascend-310P3-300I-DUO}]` |
 | `descheduler.log.level`                            | Log level that koord-descheduler printed                         | `4`                             |
 | `descheduler.replicas`                             | Replicas of koord-descheduler deployment                         | `2`                             |
 | `descheduler.image.repository`                     | Repository for koord-descheduler image                           | `koordinator-sh/koord-descheduler` |
