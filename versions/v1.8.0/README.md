@@ -103,7 +103,6 @@ Feature-gate controls some influential features in Koordinator:
 | `PodMutatingWebhook`      | Whether to open a mutating webhook for Pod **create**             | `true`  | Don't inject koordinator.sh/qosClass, koordinator.sh/priority and don't replace koordinator extend resources ad so on |
 | `PodValidatingWebhook`    | Whether to open a validating webhook for Pod **create/update**    | `true`  | It is possible to create some Pods that do not conform to the Koordinator specification, causing some unpredictable problems |
 
-
 If you want to configure the feature-gate, just set the parameter when install or upgrade. Such as:
 
 ```bash
