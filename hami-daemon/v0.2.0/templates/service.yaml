@@ -7,7 +7,7 @@ metadata:
     koord-app: hami-daemon
   {{- include "hami-daemon.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.daemon.type }}
+  type: {{ .Values.daemon.vgpuMonitor.type }}
   selector:
     koord-app: hami-daemon
     {{- include "hami-daemon.selectorLabels" . | nindent 4 }}
