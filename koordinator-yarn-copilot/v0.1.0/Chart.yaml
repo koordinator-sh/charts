@@ -2,5 +2,9 @@ apiVersion: v2
 name: koordinator-yarn-copilot
 description: A Helm chart for colocation k8s with hadoop yarn.
 type: application
-version: 0.1.0
+version: 0.1.1
 appVersion: "0.1.0"
+annotations:
+  artifacthub.io/changes: |
+    - "[Fixed]: deployment replicas hardcoded, now respects koordYarnOperator.replicas in values"
+    - "[Fixed]: metrics.addr missing from values.yaml, add field to allow bind address override"
