@@ -39,7 +39,7 @@ spec:
           - -runtime-hooks-host-endpoint={{ .Values.koordlet.hostDirs.koordletSockDir }}/koordlet.sock
           - --logtostderr=true
           - --v={{ .Values.koordlet.log.level }}
-          image: "{{ .Values.imageRepositoryHost }}/{{ .Values.koordlet.image.repository }}:{{ .Values.koordlet.image.tag }}"
+          image: "{{ default .Values.imageRepositoryHost .Values.koordlet.image.host }}/{{ .Values.koordlet.image.repository }}:{{ .Values.koordlet.image.tag }}"
           imagePullPolicy: Always
           name: koordlet
           env:

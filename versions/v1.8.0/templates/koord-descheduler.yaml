@@ -1,3 +1,4 @@
+{{- if .Values.descheduler.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -85,3 +86,4 @@ spec:
 {{ toYaml .Values.descheduler.tolerations | indent 8 }}
 {{- end }}
 
+{{- end }}

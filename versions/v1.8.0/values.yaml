@@ -34,6 +34,7 @@ imagePullSecrets: {}
 
 koordlet:
   image:
+    host: registry.cn-beijing.aliyuncs.com
     repository: koordinator-sh/koordlet
     tag: "v1.8.0"
   resources:
@@ -64,6 +65,7 @@ koordlet:
   enableServiceMonitor: false
 
 manager:
+  controllers: 'nodemetric,noderesource,nodeslo,profile,colocationprofile'
   # settings for log print
   log:
     # log level for koord-manager
@@ -111,6 +113,7 @@ serviceAccount:
   annotations: {}
 
 scheduler:
+  enabled: true
   # settings for log print
   log:
     # log level for koord-scheduler
@@ -155,6 +158,7 @@ scheduler:
   monitorEnabled: false
 
 descheduler:
+  enabled: true
   # settings for log print
   log:
     # log level for koord-descheduler
@@ -185,6 +189,7 @@ descheduler:
   monitorEnabled: false
 
 deviceDaemon:
+  enabled: true
   image:
     repository: koordinator-sh/koord-device-daemon
     tag: "v1.8.0"

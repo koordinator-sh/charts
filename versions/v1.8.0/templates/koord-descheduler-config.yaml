@@ -1,3 +1,4 @@
+{{- if .Values.descheduler.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -68,3 +69,4 @@ data:
           highThresholds:
             cpu: 75
             memory: 80
+{{- end }}
