@@ -1,4 +1,4 @@
-{{- if and .Values.descheduler.monitorEnabled }}
+{{- if and .Values.descheduler.enabled .Values.descheduler.monitorEnabled }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
@@ -20,7 +20,7 @@ spec:
       port: metrics
 {{- end }}
 
-{{- if and .Values.scheduler.monitorEnabled }}
+{{- if and .Values.scheduler.enabled .Values.scheduler.monitorEnabled }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
