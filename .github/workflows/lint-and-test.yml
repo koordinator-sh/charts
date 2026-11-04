@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
 
@@ -15,7 +15,7 @@ jobs:
         uses: azure/setup-helm@v1
 
       - name: Set up python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v7.1.0
         with:
           python-version: 3.13.2
 
@@ -33,17 +33,29 @@ jobs:
         run: |
           changed=$(ct list-changed --target-branch ${{ github.event.repository.default_branch }})
           if [[ -n "$changed" ]]; then
-            echo "::set-output name=changed::true"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+          # chart-testing does not detect changes behind the koordinator symlink.
+          if ! git diff --quiet origin/${{ github.event.repository.default_branch }}...HEAD -- charts/koordinator versions; then
+            echo "koordinator_changed=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Run chart-testing (lint)
         run: ct lint --debug --target-branch ${{ github.event.repository.default_branch }} --config ./.github/configs/ct-lint.yaml --lint-conf ./.github/configs/lintconf.yaml
 
+      - name: Run chart-testing (koordinator lint)
+        if: steps.list-changed.outputs.koordinator_changed == 'true'
+        run: ct lint --charts charts/koordinator --config ./.github/configs/ct-lint.yaml --lint-conf ./.github/configs/lintconf.yaml
+
       - name: Create kind cluster
         uses: helm/kind-action@v1.2.0
-        if: steps.list-changed.outputs.changed == 'true'
+        if: steps.list-changed.outputs.changed == 'true' || steps.list-changed.outputs.koordinator_changed == 'true'
         with:
           config: .github/configs/kind-config.yaml
 
       - name: Run chart-testing (install)
         run: ct install --target-branch ${{ github.event.repository.default_branch }} --config ./.github/configs/ct-install.yaml
         if: steps.list-changed.outputs.changed == 'true'
+
+      - name: Run chart-testing (koordinator install)
+        run: ct install --charts charts/koordinator --config ./.github/configs/ct-install.yaml
+        if: steps.list-changed.outputs.koordinator_changed == 'true'
