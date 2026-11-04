@@ -17,7 +17,7 @@ jobs:
       - name: Set up python
         uses: actions/setup-python@v7.1.0
         with:
-          python-version: 3.13.2
+          python-version: '3.13'
 
       - name: Test koordinator rendering
         run: |
