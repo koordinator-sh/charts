@@ -1,0 +1,18 @@
+{{- if .Values.manager.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: slo-controller-config
+  namespace: {{ .Values.installation.namespace }}
+data:
+  colocation-config: |
+    {
+      "enable": true
+    }
+  resource-threshold-config: |
+    {
+      "clusterStrategy": {
+        "enable": true
+      }
+    }
+{{- end }}
